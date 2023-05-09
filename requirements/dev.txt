@@ -1,0 +1,8 @@
+-r base.txt
+flake8
+flake8-print
+flake8-multiline-containers
+flake8-builtins
+flake8-import-order
+flake8-commas
+flake8-quotes
