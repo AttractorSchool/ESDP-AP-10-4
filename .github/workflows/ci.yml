@@ -1,0 +1,15 @@
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  check-code-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - run: pip install -r requirements/dev.txt
+      - run: flake8 .
