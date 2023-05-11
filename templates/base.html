@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <title>{% block title %} gallery {% endblock %}</title>
+</head>
+<body>
+{% block menu %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">KZ TOURS</a>
+            <div class="" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a class="nav-link" href="{% url "logout" %}">LOGOUT</a>
+                        </li>
+                    {% else %}
+                        {#                        {% url 'login' as login_url %}#}
+                        {#                        {% url 'register' as register_url %}#}
+                        <li>
+                            {#                                <a class="nav-link" href="{% url "login" %}">LOGIN</a>#}
+                        </li>
+                        <li>
+                            {#                                <a class="nav-link" href="{% url "register" %}">REGISTER</a>#}
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+</body>
+</html>
