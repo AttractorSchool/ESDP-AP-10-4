@@ -23,7 +23,7 @@ class UserRegisterForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data.get("password"))
+        user.set_password(self.cleaned_data.get('password'))
         if commit:
             user.save()
             Profile.objects.create(user=user)
