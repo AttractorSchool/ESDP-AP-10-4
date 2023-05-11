@@ -1,5 +1,5 @@
 [flake8]
 max-line-length = 100
 import-order-style = google
-application-import-names = core
-exclude = venv
+application-import-names = core, accounts
+exclude = venv, **/migrations/**
