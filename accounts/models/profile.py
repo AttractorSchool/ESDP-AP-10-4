@@ -40,7 +40,7 @@ class Profile(models.Model):
         null=True,
         blank=True,
         max_length=2048,
-        verbose_name='О себе'
+        verbose_name='О себе',
     )
 
     experience_resume = models.FileField(
