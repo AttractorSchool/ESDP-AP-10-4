@@ -6,17 +6,16 @@ from accounts.forms import UserRegisterForm
 
 
 class RegisterView(CreateView):
-    template_name = "register.html"
+    template_name = 'register.html'
     form_class = UserRegisterForm
-    success_url = "/admin"
+    success_url = '/admin'
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save()
-            print(user)
             login(request, user)
-            return redirect("/admin")
+            return redirect('/admin')
         context = dict()
-        context["form"] = form
+        context['form'] = form
         return self.render_to_response(context)
