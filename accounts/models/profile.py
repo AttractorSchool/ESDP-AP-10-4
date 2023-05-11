@@ -27,7 +27,7 @@ class Profile(models.Model):
         max_length=512,
     )
 
-    birthdate = models.DateField()
+    birthdate = models.DateField(null=True, blank=False)
 
     languages = models.CharField(
         null=True,

@@ -2,15 +2,17 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from accounts.models import CustomUser
+from accounts.models.profile import Profile
 
 
 class UserRegisterForm(forms.ModelForm):
     password = forms.CharField(required=True, widget=forms.PasswordInput)
     password_confirm = forms.CharField(required=True, widget=forms.PasswordInput)
+    is_guide = forms.BooleanField(required=False)
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'first_name', 'last_name', 'password', 'password_confirm')
+        fields = ('email', 'first_name', 'last_name', 'password', 'password_confirm', 'is_guide')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -20,6 +22,9 @@ class UserRegisterForm(forms.ModelForm):
             raise ValidationError('Пароли не совпадают')
 
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super().save(commit=False)
         user.set_password(self.cleaned_data.get('password'))
+        if commit:
+            user.save()
+            Profile.objects.create(user=user)
         return user
