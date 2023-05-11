@@ -14,6 +14,8 @@ class RegisterView(CreateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save()
+            user.profile.is_guide = form.cleaned_data.get('is_guide')
+            user.profile.save()
             login(request, user)
             return redirect('/admin')
         context = dict()
