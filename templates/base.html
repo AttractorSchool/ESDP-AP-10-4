@@ -15,20 +15,20 @@
             <a class="navbar-brand" href="#">KZ TOURS</a>
             <div class="" id="navbarNav">
                 <ul class="navbar-nav">
-{#                    {% if user.is_authenticated %}#}
-{#                        <li>#}
-{#                            <a class="nav-link" href="{% url "logout" %}">LOGOUT</a>#}
-{#                        </li>#}
-{#                    {% else %}#}
-                        {#                        {% url 'login' as login_url %}#}
-                        {#                        {% url 'register' as register_url %}#}
-{#                        <li>#}
-                            {#                                <a class="nav-link" href="{% url "login" %}">LOGIN</a>#}
-{#                        </li>#}
-{#                        <li>#}
-                            {#                                <a class="nav-link" href="{% url "register" %}">REGISTER</a>#}
-{#                        </li>#}
-{#                    {% endif %}#}
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a class="nav-link" href="{% url "logout" %}">LOGOUT</a>
+                        </li>
+                    {% else %}
+                        {% url 'login' as login_url %}
+                        {% url 'register' as register_url %}
+                        <li>
+                            <a class="nav-link" href="{% url "login" %}">LOGIN</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url "register" %}">REGISTER</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
