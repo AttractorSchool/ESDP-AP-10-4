@@ -2,7 +2,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from accounts.models import CustomUser
-from accounts.models.profile import Profile
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -26,5 +25,4 @@ class UserRegisterForm(forms.ModelForm):
         user.set_password(self.cleaned_data.get('password'))
         if commit:
             user.save()
-            Profile.objects.create(user=user)
         return user
