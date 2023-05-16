@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import CustomUser, Profile
 from .utils import create_profile
 
