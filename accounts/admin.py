@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-from .forms import UserRegisterForm
 from .models import CustomUser, Profile
 from .utils import create_profile
 

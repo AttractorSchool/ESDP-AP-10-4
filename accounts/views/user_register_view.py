@@ -16,7 +16,6 @@ class RegisterView(CreateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = create_profile(form)
-            print(user)
             login(request, user)
             return redirect('/admin')
         self.context['form'] = form

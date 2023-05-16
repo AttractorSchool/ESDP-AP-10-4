@@ -2,7 +2,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from accounts.models import CustomUser
-from accounts.models.profile import Profile
 
 
 class UserLoginForm(forms.Form):

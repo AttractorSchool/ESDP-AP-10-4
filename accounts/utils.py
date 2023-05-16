@@ -12,5 +12,3 @@ def create_profile(form):
     user.profile.is_guide = form.cleaned_data.get('is_guide')
     user.profile.save()
     return user
-
-
