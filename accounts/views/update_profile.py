@@ -1,14 +1,16 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
-
 from django.views.generic import UpdateView
 
+from accounts.choices import GuideProfileStatus
 from accounts.forms import ProfileUpdateForm
 from accounts.models import Profile
-from accounts.choices import GuideProfileStatus
 
-
-ALLOWED_TO_EDIT = [GuideProfileStatus.NOT_VERIFIED, GuideProfileStatus.SENT_TO_REWORK, GuideProfileStatus.CONFIRMED]
+ALLOWED_TO_EDIT = [
+    GuideProfileStatus.NOT_VERIFIED,
+    GuideProfileStatus.SENT_TO_REWORK,
+    GuideProfileStatus.CONFIRMED,
+]
 
 
 class UpdateGuideProfile(UserPassesTestMixin, UpdateView):
