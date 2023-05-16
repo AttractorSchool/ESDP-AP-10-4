@@ -8,7 +8,7 @@ from accounts.forms import UserRegisterForm
 class RegisterView(CreateView):
     template_name = 'register.html'
     form_class = UserRegisterForm
-    success_url = '/admin'
+    success_url = redirect('/admin')
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)

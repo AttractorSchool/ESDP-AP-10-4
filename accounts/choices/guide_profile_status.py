@@ -12,6 +12,6 @@ class GuideProfileStatus(models.TextChoices):
 
     NOT_VERIFIED = 'NOT VERIFIED', 'Непроверен'
     SENT_TO_VERIFICATION = 'SENT TO VERIFICATION', 'Отправлен на проверку'
-    SENT_TO_REWORK = 'SENT TO REVIEW', 'Отправлен на доработку'
+    SENT_TO_REWORK = 'SENT TO REWORK', 'Отправлен на доработку'
     CONFIRMED = 'CONFIRMED', 'Подтвержден'
-    REFUSED = 'REFUSE', 'Отказ'
+    REFUSED = 'REFUSED', 'Отказ'
