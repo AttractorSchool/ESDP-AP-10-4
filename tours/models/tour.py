@@ -62,8 +62,8 @@ class Tour(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Туры'
-        verbose_name_plural = 'Тур'
+        verbose_name = 'Тур'
+        verbose_name_plural = 'Туры'
 
     def __str__(self):
         return f'Tour {self.title} by {self.author}'
