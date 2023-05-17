@@ -1,9 +1,9 @@
 from django.urls import path
 from tours.views.crud_tours import (
     TourCreateView,
+    TourDeleteView,
     TourDetailView,
     TourUpdateView,
-    TourDeleteView
 )
 
 urlpatterns = [

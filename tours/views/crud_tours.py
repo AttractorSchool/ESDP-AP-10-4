@@ -1,8 +1,8 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
-from tours.models.tour import Tour
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from tours.forms.tour_create_form import TourCreateForm
+from tours.models.tour import Tour
 
 
 class TourCreateView(CreateView):

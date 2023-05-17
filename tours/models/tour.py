@@ -10,55 +10,55 @@ class Tour(models.Model):
         related_name='tour',
         blank=False,
         verbose_name='Автор',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     title = models.CharField(
         max_length=300,
         null=False,
         blank=False,
-        verbose_name='Название'
+        verbose_name='Название',
     )
     description = models.TextField(
         max_length=3000,
         null=False,
         blank=False,
-        verbose_name='Описание'
+        verbose_name='Описание',
     )
     start_date = models.DateField(
         auto_now_add=False,
         auto_now=False,
-        verbose_name='Дата старта'
+        verbose_name='Дата старта',
     )
     end_date = models.DateField(
         auto_now_add=False,
         auto_now=False,
-        verbose_name='Дата завершения'
+        verbose_name='Дата завершения',
     )
     language = models.CharField(
         max_length=300,
         null=False,
         blank=False,
-        verbose_name='Язык проведения'
+        verbose_name='Язык проведения',
     )
     price = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(1000000)],
-        verbose_name='Стоимость'
+        verbose_name='Стоимость',
     )
     max_number_of_tourists = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(250)],
-        verbose_name='Максимальное количество туристов'
+        verbose_name='Максимальное количество туристов',
     )
     min_number_of_tourists = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(250)],
-        verbose_name='Минимальное количество туристов'
+        verbose_name='Минимальное количество туристов',
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name="Дата и время создания"
+        verbose_name='Дата и время создания',
     )
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name="Дата и время обновления"
+        verbose_name='Дата и время обновления',
     )
 
     class Meta:
@@ -66,4 +66,4 @@ class Tour(models.Model):
         verbose_name_plural = 'Тур'
 
     def __str__(self):
-        return f"Tour {self.title} by {self.author}"
+        return f'Tour {self.title} by {self.author}'

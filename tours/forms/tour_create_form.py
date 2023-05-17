@@ -13,7 +13,7 @@ class TourCreateForm(forms.ModelForm):
             'language',
             'price',
             'max_number_of_tourists',
-            'min_number_of_tourists'
+            'min_number_of_tourists',
         )
         labels = {
             'title': 'Название тура',
@@ -23,19 +23,13 @@ class TourCreateForm(forms.ModelForm):
             'language': 'Язык проведения тура',
             'price': 'Цена тура',
             'max_number_of_tourists': 'Максимальное количество туристов',
-            'min_number_of_tourists': 'Минимальное количество туристов'
+            'min_number_of_tourists': 'Минимальное количество туристов',
         }
         widgets = {
             'start_date': forms.DateInput(
                 format=('%Y-%m-%d'),
-                attrs={'class': 'form-control',
-                       'placeholder': 'Select a date',
-                       'type': 'date'
-                       }),
+                attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
             'end_date': forms.DateInput(
                 format=('%Y-%m-%d'),
-                attrs={'class': 'form-control',
-                       'placeholder': 'Select a date',
-                       'type': 'date'
-                       }),
+                attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
         }
