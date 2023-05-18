@@ -1,7 +1,6 @@
+from choices import StatusChoice
 from django.contrib.auth import get_user_model
 from django.db import models
-
-from choices import StatusChoice
 
 
 class Profile(models.Model):

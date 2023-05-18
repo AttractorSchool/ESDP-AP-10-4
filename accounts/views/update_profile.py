@@ -1,8 +1,8 @@
+from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
-from choices import StatusChoice
 from accounts.forms import ProfileUpdateForm
 from accounts.models import Profile
 
