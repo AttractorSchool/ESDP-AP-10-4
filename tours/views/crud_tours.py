@@ -5,6 +5,10 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from tours.forms.tour_create_form import TourCreateForm
 from tours.models.tour import Tour
 
+ALLOWED_TO_VIEW = [
+    StatusChoice.CONFIRMED,
+]
+
 
 class TourListView(ListView):
     model = Tour
@@ -30,10 +34,19 @@ class TourCreateView(CreateView):
         return reverse('tour_detail', kwargs={'pk': self.object.pk})
 
 
-class TourDetailView(DetailView):
+class TourDetailView(UserPassesTestMixin, DetailView):
     template_name = 'tour_detail.html'
     model = Tour
     context_object_name = 'tour'
+
+    def test_func(self):
+        if self.request.user == self.get_object().author:
+            return True
+        elif self.request.user != self.get_object().author \
+                and self.get_object().moderation_status in ALLOWED_TO_VIEW:
+            return True
+        else:
+            return False
 
 
 class TourUpdateView(UserPassesTestMixin, UpdateView):

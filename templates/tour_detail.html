@@ -16,6 +16,10 @@
           <p class="card-text">Завершение тура: {{ tour.end_date }}</p>
           <p class="card-text">Максимальное количество людей на тур: {{ tour.max_number_of_tourists }}</p>
           <p class="card-text">Минимальное количество людей на тур: {{ tour.min_number_of_tourists }}</p>
+          <p class="card-text">Цена: {{ tour.price }} тенге</p>
+          {% if tour.moderation_status != 'CONFIRMED' %}
+            <p>Статус: {{ tour.get_moderation_status_display }}</p>
+          {% endif %}
         <p class="card-text"><small class="text-muted">Обвновлено: {{ tour.updated_at }}</small></p>
       </div>
     </div>
