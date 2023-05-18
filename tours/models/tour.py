@@ -1,3 +1,4 @@
+from choices import StatusChoice
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -51,6 +52,12 @@ class Tour(models.Model):
     min_number_of_tourists = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(250)],
         verbose_name='Минимальное количество туристов',
+    )
+    moderation_status = models.CharField(
+        max_length=256,
+        null=False,
+        choices=StatusChoice.choices,
+        default=StatusChoice.NOT_VERIFIED,
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

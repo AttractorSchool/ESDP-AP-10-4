@@ -12,13 +12,18 @@
 {% block menu %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">KZ TOURS</a>
+            <a class="navbar-brand" href="{% url 'tour_list' %}">KZ TOURS</a>
             <div class="" id="navbarNav">
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li>
                             <a class="nav-link" href="{% url "logout" %}">LOGOUT</a>
                         </li>
+
+                        <li>
+                            <a class="nav-link" href="{% url "tour_create" %}">Create Tour</a>
+                        </li>
+
                     {% else %}
                         {% url 'login' as login_url %}
                         {% url 'register' as register_url %}

@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class GuideProfileStatus(models.TextChoices):
+class StatusChoice(models.TextChoices):
     """
     Непроверен
     Отправлен на проверку
