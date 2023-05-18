@@ -1,2 +1,4 @@
 django==4.2.*
 django-bootstrap5
+django-environ
+psycopg2-binary
