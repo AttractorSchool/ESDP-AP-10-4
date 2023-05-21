@@ -20,7 +20,7 @@ class TourListView(ListView):
         return queryset.filter(moderation_status='CONFIRMED')
 
 
-class TourCreateView(CreateView):
+class TourCreateView(UserPassesTestMixin, CreateView):
     template_name = 'tour_create.html'
     model = Tour
     form_class = TourCreateForm
@@ -32,6 +32,12 @@ class TourCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('tour_detail', kwargs={'pk': self.object.pk})
+
+    def test_func(self):
+        if self.request.user.profile.is_guide \
+                and self.request.user.profile.verification_status == StatusChoice.CONFIRMED:
+            return True
+        return False
 
 
 class TourDetailView(UserPassesTestMixin, DetailView):
@@ -58,7 +64,10 @@ class TourUpdateView(UserPassesTestMixin, UpdateView):
         return reverse('tour_detail', kwargs={'pk': self.object.pk})
 
     def test_func(self):
-        return self.get_object().author == self.request.user
+        if self.get_object().author == self.request.user \
+                and self.get_object().moderation_status == StatusChoice.CONFIRMED:
+            return True
+        return False
 
 
 class TourDeleteView(UserPassesTestMixin, DeleteView):
@@ -68,4 +77,7 @@ class TourDeleteView(UserPassesTestMixin, DeleteView):
         return reverse_lazy('profile', kwargs={'pk': self.object.author_id})
 
     def test_func(self):
-        return self.get_object().author == self.request.user
+        if self.get_object().author == self.request.user \
+                and self.get_object().moderation_status == StatusChoice.CONFIRMED:
+            return True
+        return False
