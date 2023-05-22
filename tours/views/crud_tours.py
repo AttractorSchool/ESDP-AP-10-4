@@ -34,9 +34,12 @@ class TourCreateView(UserPassesTestMixin, CreateView):
         return reverse('tour_detail', kwargs={'pk': self.object.pk})
 
     def test_func(self):
-        if self.request.user.profile.is_guide \
-                and self.request.user.profile.verification_status == StatusChoice.CONFIRMED:
-            return True
+        if self.request.user.is_authenticated:
+            if self.request.user.profile.is_guide \
+                    and self.request.user.profile.verification_status == StatusChoice.CONFIRMED:
+                return True
+        else:
+            return False
         return False
 
 
