@@ -1,7 +1,6 @@
+from choices import StatusChoice
 from django.contrib.auth import get_user_model
 from django.db import models
-
-from accounts.choices import GuideProfileStatus
 
 
 class Profile(models.Model):
@@ -17,8 +16,8 @@ class Profile(models.Model):
     verification_status = models.CharField(
         max_length=256,
         null=False,
-        choices=GuideProfileStatus.choices,
-        default=GuideProfileStatus.NOT_VERIFIED,
+        choices=StatusChoice.choices,
+        default=StatusChoice.NOT_VERIFIED,
     )
 
     current_location = models.CharField(

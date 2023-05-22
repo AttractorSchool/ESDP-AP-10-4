@@ -1,6 +1,15 @@
+import datetime
+
+from choices import StatusChoice
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+
+def date_validation(value):
+    if value < datetime.date.today():
+        raise ValidationError('Нельзя выбрать дату из прошлого!')
 
 
 class Tour(models.Model):
@@ -28,11 +37,13 @@ class Tour(models.Model):
         auto_now_add=False,
         auto_now=False,
         verbose_name='Дата старта',
+        validators=[date_validation],
     )
     end_date = models.DateField(
         auto_now_add=False,
         auto_now=False,
         verbose_name='Дата завершения',
+        validators=[date_validation],
     )
     language = models.CharField(
         max_length=300,
@@ -51,6 +62,12 @@ class Tour(models.Model):
     min_number_of_tourists = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(250)],
         verbose_name='Минимальное количество туристов',
+    )
+    moderation_status = models.CharField(
+        max_length=256,
+        null=False,
+        choices=StatusChoice.choices,
+        default=StatusChoice.NOT_VERIFIED,
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
