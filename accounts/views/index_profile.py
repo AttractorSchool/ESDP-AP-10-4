@@ -1,8 +1,6 @@
-from django.contrib.auth import get_user_model
-from django.shortcuts import redirect
-from django.views.generic import DetailView
-
 from choices import StatusChoice
+from django.contrib.auth import get_user_model
+from django.views.generic import DetailView
 
 
 class GuideProfileView(DetailView):
@@ -14,7 +12,3 @@ class GuideProfileView(DetailView):
         queryset = super().get_queryset()
         queryset = queryset.filter(profile__verification_status=StatusChoice.CONFIRMED)
         return queryset
-
-
-
-
