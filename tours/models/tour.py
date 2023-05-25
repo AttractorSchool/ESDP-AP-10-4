@@ -78,6 +78,13 @@ class Tour(models.Model):
         verbose_name='Дата и время обновления',
     )
 
+    tourists = models.ManyToManyField(
+        to=get_user_model(),
+        through='booking.Booking',
+        related_name='booked_tour',
+        through_fields=('tour', 'user'),
+    )
+
     class Meta:
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
