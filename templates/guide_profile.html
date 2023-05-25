@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Гид{% endblock %}
+
+{% block content %}
+<div class="profile-info__item">
+      <h2 class="profile-info__title">Вы на странице нашего Гида:</h2>
+      <p class="profile-info__description">{{ user_obj.profile.get_full_name|default:user_obj.email }}</p>
+    </div>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Туры</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Профиль</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Контакт</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    <div class="profile-info__item">
+    <h2 class="profile-info__title">Пока нет туров</h2>
+      </div>
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="container">
+      <div class="profile-info">
+    <div class="profile-info__item">
+      <h2 class="profile-info__title">Дата рождения:</h2>
+      <p class="profile-info__description">{{ user_obj.profile.birthdate|date:'d.m.Y' }}</p>
+    </div>
+    <div class="profile-info__item">
+      <h2 class="profile-info__title">Текущая локация:</h2>
+      <p class="profile-info__description">{{ user_obj.profile.current_location }}</p>
+    </div>
+    <div class="profile-info__item">
+      <h2 class="profile-info__title">Языки:</h2>
+      <p class="profile-info__description">{{ user_obj.profile.languages }}</p>
+    </div>
+    <div class="profile-info__item">
+      <h2 class="profile-info__title">О себе:</h2>
+      <p class="profile-info__description">{{ user_obj.profile.about }}</p>
+    </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+    <div class="container">
+      <div class="profile-info">
+        <div class="profile-info__item">
+      <h2 class="profile-info__title">Почта:</h2>
+      <p class="profile-info__description">{{ user_obj.email }}</p>
+    </div>
+    <div class="profile-info__item">
+      <h2 class="profile-info__title">Номер телефона:</h2>
+      <p class="profile-info__description">скоро появится...</p>
+    </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("pills-home-tab").classList.add("active");
+    document.getElementById("pills-home").classList.add("show", "active");
+  });
+
+  document.querySelectorAll(".nav-link").forEach(function(tab) {
+    tab.addEventListener("click", function(e) {
+      e.preventDefault();
+      const target = e.target.getAttribute("data-bs-target");
+      document.querySelectorAll(".nav-link").forEach(function(link) {
+        link.classList.remove("active");
+      });
+      document.querySelectorAll(".tab-pane").forEach(function(pane) {
+        pane.classList.remove("show", "active");
+      });
+      tab.classList.add("active");
+      document.querySelector(target).classList.add("show", "active");
+    });
+  });
+</script>
+
+{% endblock %}
+
