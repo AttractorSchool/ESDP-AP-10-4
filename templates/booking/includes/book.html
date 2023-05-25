@@ -1,0 +1,6 @@
+<form action="{% url 'book_tours' tour.pk %}" method="POST">
+    {% csrf_token %}
+    <button class="btn btn-success" type="submit">Book</button>
+</form>
+
+

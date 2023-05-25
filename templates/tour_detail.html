@@ -2,27 +2,38 @@
 {% load django_bootstrap5%}
 
 {% block content %}
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="https://s9.travelask.ru/system/images/files/001/276/193/wysiwyg_jpg/%D0%B0%D0%BB%D1%8C%D0%BF%D1%8B.jpg?1550655537" class="img-fluid rounded-start" alt="...">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ tour.title }}</h5>
+                <p class="card-text">Описание тура: {{ tour.description }}</p>
+                  <p class="card-text">Язык проведения тура: {{ tour.language }}</p>
+                  <p class="card-text">Начало тура: {{ tour.start_date }}</p>
+                  <p class="card-text">Завершение тура: {{ tour.end_date }}</p>
+                  <p class="card-text">Максимальное количество людей на тур: {{ tour.max_number_of_tourists }}</p>
+                  <p class="card-text">Минимальное количество людей на тур: {{ tour.min_number_of_tourists }}</p>
+                  <p class="card-text">Цена: {{ tour.price }} тенге</p>
+                  {% if tour.moderation_status != 'CONFIRMED' %}
+                    <p>Статус: {{ tour.get_moderation_status_display }}</p>
+                  {% endif %}
+                <p class="card-text"><small class="text-muted">Обновлено: {{ tour.updated_at }}</small></p>
+              </div>
+
+              {#  Booking button #}
+              {% if user not in tour.tourists.all %}
+                  {% if user.profile.is_guide == False %}
+                      <div class="card-footer">
+                          {% include 'booking/includes/book.html' %}
+                      </div>
+                  {% endif %}
+              {% else %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded bg-success">
+                    <i class="bi bi-check fs-5"></i>
+                    <span class="visually-hidden">unread messages</span>
+                </span>
+              {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">{{ tour.title }}</h5>
-        <p class="card-text">Описание тура: {{ tour.description }}</p>
-          <p class="card-text">Язык проведения тура: {{ tour.language }}</p>
-          <p class="card-text">Начало тура: {{ tour.start_date }}</p>
-          <p class="card-text">Завершение тура: {{ tour.end_date }}</p>
-          <p class="card-text">Максимальное количество людей на тур: {{ tour.max_number_of_tourists }}</p>
-          <p class="card-text">Минимальное количество людей на тур: {{ tour.min_number_of_tourists }}</p>
-          <p class="card-text">Цена: {{ tour.price }} тенге</p>
-          {% if tour.moderation_status != 'CONFIRMED' %}
-            <p>Статус: {{ tour.get_moderation_status_display }}</p>
-          {% endif %}
-        <p class="card-text"><small class="text-muted">Обвновлено: {{ tour.updated_at }}</small></p>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
