@@ -21,7 +21,7 @@ class LoginView(View):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
+                return redirect('profile', user.profile.id)
         return render(request, self.template_name, {'form': form})
 
 
