@@ -5,20 +5,33 @@
 {% block menu %}
 {% if user.is_authenticated and user.profile == user_obj %}
 <ul class="navbar-nav">
-<li>
-    <a class="nav_link" href="{% url "update_guide_profile" user_obj.id %}">Update profile</a>
-</li>
+    <li>
+        <a class="nav_link" href="{% url "update_guide_profile" user_obj.id %}">Update profile</a>
+    </li>
 </ul>
 {% endif %}
 {% endblock %}
 {% block content %}
 <div class="profile-info__item">
+    {% if user.is_authenticated and user.profile == user_obj %}
+    <h2 class="profile-info__title">Вы на Своей личной странице</h2>
+    {% else %}
     {% if user_obj.is_guide %}
     <h2 class="profile-info__title">Вы на странице нашего Гида:</h2>
     {% else %}
     <h2 class="profile-info__title">Вы на странице нашего Туриста:</h2>
     {% endif %}
+    {% endif %}
     <p class="profile-info__description">{{ user_obj.get_full_name }}</p>
+    {% if user_obj.is_guide %}
+    {% if user.is_authenticated and user.profile == user_obj %}
+    <h2 class="profile-info__title">
+        Статус:
+    </h2>
+
+    <p class="profile-info__description">{{ user_obj.verification_status }}</p>
+    {% endif %}
+    {% endif %}
 </div>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
@@ -40,15 +53,27 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="profile-info__item">
-            {% if user.profile.is_guide %}
-            <h2 class="profile-info__title">Пока нет Ваших туров.</h2>
-
-            <li>
-                <a class="nav_link" href="{% url "tour_create" %}">Create Tour</a>
-            </li>
+            {% if user_obj.is_guide %}
+                {% if user.is_authenticated and user.profile == user_obj %}
+                    {% if is_verified %}
+                        <h2 class="profile-info__title">Пока нет Ваших туров.</h2>
+                        <li>
+                            <a class="nav_link" href="{% url 'tour_create' %}">Create Tour</a>
+                        </li>
+                    {% else %}
+                        <h2 class="profile-info__title">Пока нет возможности создать Тур</h2>
+                    {% endif %}
+                {% else %}
+                    <h2 class="profile-info__title">У данного Гида пока нет туров.</h2>
+                {% endif %}
             {% else %}
-            <h2 class="profile-info__title">Пока нет забронированных туров</h2>
+                {% if user.is_authenticated and user.profile == user_obj %}
+                    <h2 class="profile-info__title">Пока у Вас нет избранных туров.</h2>
+                {% else %}
+                    <h2 class="profile-info__title">У данного Пользователя пока нет туров.</h2>
+                {% endif %}
             {% endif %}
+
         </div>
     </div>
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">

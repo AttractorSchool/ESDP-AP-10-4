@@ -22,11 +22,12 @@
                     <a class="nav_link" href="{% url "logout" %}">LOGOUT</a>
                 </li>
                 {% if user.profile.is_guide %}
+                {% if user.profile.verification_status == StatusChoice.CONFIRMED %}
                 <li>
                     <a class="nav_link" href="{% url "tour_create" %}">Create Tour</a>
                 </li>
                 {% endif %}
-
+                {% endif %}
                 {% else %}
                 {% url 'login' as login_url %}
                 {% url 'register' as register_url %}
