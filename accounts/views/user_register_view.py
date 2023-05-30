@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView
 
 from accounts.forms import UserRegisterForm
-from accounts.utils import create_profile
+# from accounts.utils import create_profile
 
 
 class RegisterView(CreateView):

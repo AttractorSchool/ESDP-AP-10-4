@@ -1,4 +1,4 @@
-from .custom_user import CustomUser
-from .profile import Profile
+from .user import User
+from .guide_profile import GuideProfile
 
-__all__ = ['CustomUser', 'Profile']
+__all__ = ['User', 'GuideProfile']

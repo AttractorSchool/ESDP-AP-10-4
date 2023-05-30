@@ -4,9 +4,13 @@ from django.db import models
 from accounts.managers import CustomUserManager
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, blank=False, max_length=320)
+    is_guide = models.BooleanField(null=False, default=False)
+    is_tourist = models.BooleanField(null=False, default=False)
+    birthdate = models.DateField(null=True, blank=False)
+
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
