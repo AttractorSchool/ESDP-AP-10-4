@@ -10,6 +10,11 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+
+        # set is_tourist True if user is not guide
+        if not user.is_guide:
+            user.is_tourist = True
+
         user.save(using=self._db)
         return user
 
