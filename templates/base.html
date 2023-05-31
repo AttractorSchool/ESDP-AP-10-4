@@ -19,7 +19,7 @@
                         <li>
                             <a class="nav-link" href="{% url "logout" %}">LOGOUT</a>
                         </li>
-                        {% if user.profile.is_guide %}
+                        {% if user.is_guide %}
                         <li>
                             <a class="nav-link" href="{% url "tour_create" %}">Create Tour</a>
                         </li>

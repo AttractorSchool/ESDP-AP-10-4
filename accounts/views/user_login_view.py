@@ -7,7 +7,7 @@ from accounts.forms import UserLoginForm
 
 class LoginView(View):
     form_class = UserLoginForm
-    template_name = 'login.html'
+    template_name = 'account/login.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()

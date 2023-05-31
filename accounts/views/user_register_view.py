@@ -7,7 +7,7 @@
 #
 #
 # class RegisterView(CreateView):
-#     template_name = 'register.html'
+#     template_name = 'account/register.html'
 #     form_class = UserRegisterForm
 #     success_url = '/admin'
 #     context = dict()
