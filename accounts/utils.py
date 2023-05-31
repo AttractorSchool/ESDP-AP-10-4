@@ -1,14 +1,11 @@
-# from accounts.models import guieProfile
-#
-#
-# def create_profile(form):
-#     user = form.save()
-#     user.set_password(form.cleaned_data.get('password'))
-#     Profile.objects.create(user=user)
-#     if form.cleaned_data.get('is_guide') is None:
-#         user.profile.is_guide = False
-#         user.profile.save()
-#         return user
-#     user.profile.is_guide = form.cleaned_data.get('is_guide')
-#     user.profile.save()
-#     return user
+from accounts.models import GuideProfile
+
+
+def create_profile(form):
+    user = form.save()
+    user.set_password(form.cleaned_data.get('password'))
+    if form.cleaned_data.get("is_guide"):
+        GuideProfile.objects.create(user=user)
+        user.guide_profile.save()
+        return user
+    return user

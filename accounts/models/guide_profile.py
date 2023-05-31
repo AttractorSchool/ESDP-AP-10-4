@@ -6,7 +6,7 @@ from django.db import models
 class GuideProfile(models.Model):
     user = models.OneToOneField(
         to=get_user_model(),
-        related_name='profile',
+        related_name='guide_profile',
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
     )
