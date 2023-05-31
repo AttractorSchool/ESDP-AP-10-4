@@ -36,7 +36,7 @@ class TourCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         if self.request.user.is_authenticated:
             if self.request.user.is_guide \
-                    and self.request.user.profile.verification_status == StatusChoice.CONFIRMED:
+                    and self.request.user.guide_profile.verification_status == StatusChoice.CONFIRMED:
                 return True
         else:
             return False
