@@ -16,7 +16,7 @@
 # class UpdateGuideProfile(UserPassesTestMixin, UpdateView):
 #     model = Profile
 #     form_class = ProfileUpdateForm
-#     template_name = 'update_profile.html'
+#     template_name = 'account/update_profile.html'
 #     context_object_name = 'form'
 #     success_url = reverse_lazy('login')
 #

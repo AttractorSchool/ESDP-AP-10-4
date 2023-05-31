@@ -1,6 +1,8 @@
-# from django.contrib import admin
-#
-# from .models import User, GuideProfile
+from django.contrib import admin
+
+from .models import User, GuideProfile
+
+
 # from .utils import create_profile
 #
 #
@@ -26,3 +28,5 @@
 #
 #
 # admin.site.register(GuideProfile, ProfileAdmin)
+admin.site.register(User)
+admin.site.register(GuideProfile)
