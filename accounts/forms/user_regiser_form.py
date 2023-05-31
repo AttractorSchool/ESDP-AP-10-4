@@ -23,6 +23,10 @@ class UserRegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data.get('password'))
+
+        if not user.is_guide:
+            user.is_tourist = True
+
         if commit:
             user.save()
         return user
