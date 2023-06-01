@@ -95,7 +95,11 @@ class Tour(models.Model):
         tourists_count = self.tourists.count()
         if tourists_count == 0:
             return self.price
-        return self.price / tourists_count
+        return round(self.price / tourists_count, 2)
+
+    def get_grand_total_for_booking(self):
+        grand_total = self.get_grand_total() - self.get_deposit()
+        return round(grand_total, 2)
 
     def __str__(self):
         return f'Tour {self.title} by {self.author}'

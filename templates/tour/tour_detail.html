@@ -16,7 +16,11 @@
                 <p class="card-text">Цена: {{ tour.price }} тенге</p>
                 <p class="card-text"><b>Депозит: {{ tour.get_deposit }} тенге</b></p>
                 <p class="card-text"><b>Кол-во людей, забронировавших тур: {{ tour.tourists.count }}</b></p>
-                <p class="card-text"><b>Итоговая сумма на сегодняшний день: {{ tour.get_grand_total }} тенге</b></p>
+                {% if request.user in tour.tourists.all %}
+                    <p class="card-text"><b>Цена тура для вас: {{ tour.get_grand_total_for_booking }} тенге</b></p>
+                {% else %}
+                    <p class="card-text"><b>Цена тура, если вы забронируете место сейчас: {{ tour.get_grand_total }} тенге</b></p>
+                {% endif %}
                 {% if tour.moderation_status != 'CONFIRMED' %}
                     <p>Статус: {{ tour.get_moderation_status_display }}</p>
                 {% endif %}

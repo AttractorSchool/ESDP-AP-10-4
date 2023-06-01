@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from tours.models.tour import Tour
 
 
@@ -33,3 +34,11 @@ class TourCreateForm(forms.ModelForm):
                 format=('%Y-%m-%d'),
                 attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date > end_date:
+            raise forms.ValidationError("Дата завершения тура не может быть больше даты начала!")
