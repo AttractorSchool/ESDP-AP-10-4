@@ -77,10 +77,25 @@ class Tour(models.Model):
         auto_now=True,
         verbose_name='Дата и время обновления',
     )
+    tourists = models.ManyToManyField(
+        to=get_user_model(),
+        through='booking.Booking',
+        related_name='booked_tour',
+        through_fields=('tour', 'user'),
+    )
 
     class Meta:
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
+
+    def get_deposit(self):
+        return self.price / self.max_number_of_tourists
+
+    def get_grand_total(self):
+        tourists_count = self.tourists.count()
+        if tourists_count == 0:
+            return self.price
+        return self.price / tourists_count
 
     def __str__(self):
         return f'Tour {self.title} by {self.author}'
