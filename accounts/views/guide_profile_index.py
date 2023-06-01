@@ -13,7 +13,6 @@ class GuideProfileView(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         verification_status = self.object.verification_status
         context['is_verified'] = verification_status == StatusChoice.CONFIRMED
         return context
