@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'django_bootstrap5',
     'tours',
+    'booking'
 ]
 
 MIDDLEWARE = [
