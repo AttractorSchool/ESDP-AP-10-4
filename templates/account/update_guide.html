@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_field form.first_name %}
+        {% bootstrap_field form.last_name %}
+        {% bootstrap_field form.birthdate %}
+        {% bootstrap_field profile_form.current_location %}
+        {% bootstrap_field profile_form.languages %}
+        {% bootstrap_field profile_form.about %}
+        {% bootstrap_field profile_form.experience_resume %}
+        {% bootstrap_field profile_form.certificates %}
+        {% bootstrap_field profile_form.bank_details %}
+        {% bootstrap_button button_type="submit" content="Отправить на проверку" %}
+    </form>
+{% endblock %}
