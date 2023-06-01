@@ -9,7 +9,6 @@
     <title>{% block title %} gallery {% endblock %}</title>
 </head>
 <body>
-{% block menu %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'tour_list' %}">KZ TOURS</a>
@@ -17,11 +16,11 @@
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li>
-                            <a class="nav-link" href="{% url "logout" %}">LOGOUT</a>
+                            <a class="nav_link" href="{% url "logout" %}">LOGOUT</a>
                         </li>
                         {% if user.is_guide %}
                         <li>
-                            <a class="nav-link" href="{% url "tour_create" %}">Create Tour</a>
+                            <a class="nav_link" href="{% url "tour_create" %}">Create Tour</a>
                         </li>
                         {% endif %}
 
@@ -29,17 +28,19 @@
                         {% url 'login' as login_url %}
                         {% url 'register' as register_url %}
                         <li>
-                            <a class="nav-link" href="{% url "login" %}">LOGIN</a>
+                            <a class="nav_link" href="{% url "login" %}">LOGIN</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{% url "register" %}">REGISTER</a>
+                            <a class="nav_link" href="{% url "register" %}">REGISTER</a>
                         </li>
                     {% endif %}
+                    {% block menu %}
+                    {% endblock %}
                 </ul>
             </div>
         </div>
     </nav>
-{% endblock %}
+
 
 
 <div class="container">
