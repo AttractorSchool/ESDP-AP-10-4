@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
 
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
 {% block menu %}
     {% if  user.is_authenticated and user.is_guide %}
 
