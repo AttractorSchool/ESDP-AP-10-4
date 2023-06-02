@@ -18,11 +18,11 @@
                     <li>
                         <a class="nav-link" href="{% url "tour_create" %}">Создать Тур</a>
                     </li>
+                     <li class="nav-link">
+                        <a href="{% url "guide-profile" user.guide_profile.pk %}">Личный кабинет</a>
+                    </li>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li class="nav-link">
-                        <a href="{% url "guide-profile" user.pk %}">Личный кабинет</a>
-                    </li>
                     <li>
                         <a class="nav-link" href="{% url "logout" %}">Выйти</a>
                     </li>
