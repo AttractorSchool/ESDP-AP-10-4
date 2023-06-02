@@ -9,35 +9,37 @@
     <title>{% block title %} Tours {% endblock %}</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'tour_list' %}">KZ TOURS</a>
-            <div class="" id="navbarNav">
-                <ul class="navbar-nav">
-                    {% if  user.is_authenticated and user.is_guide %}
-                        <li>
-                            <a class="nav-link" href="{% url "tour_create" %}">Создать Тур</a>
-                        </li>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                        <li>
-                            <a class="nav-link" href="{% url "logout" %}">Выйти</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a class="nav-link" href="{% url "login" %}">Войти</a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{% url "register" %}">Зарегестрироваться</a>
-                        </li>
-                    {% endif %}
-                    {% block menu %}
-                    {% endblock %}
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'tour_list' %}">KZ TOURS</a>
+        <div class="" id="navbarNav">
+            <ul class="navbar-nav">
+                {% if  user.is_authenticated and user.is_guide %}
+                    <li>
+                        <a class="nav-link" href="{% url "tour_create" %}">Создать Тур</a>
+                    </li>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <li class="nav-link">
+                        <a href="{% url "guide-profile" user.pk %}">Личный кабинет</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url "logout" %}">Выйти</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="nav-link" href="{% url "login" %}">Войти</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url "register" %}">Зарегестрироваться</a>
+                    </li>
+                {% endif %}
+                {% block menu %}
+                {% endblock %}
+            </ul>
         </div>
-    </nav>
-
+    </div>
+</nav>
 
 
 <div class="container">
