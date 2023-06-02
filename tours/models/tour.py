@@ -12,6 +12,11 @@ def date_validation(value):
         raise ValidationError('Нельзя выбрать дату из прошлого!')
 
 
+def validator_date(start_date, end_date):
+    if start_date > end_date:
+        raise ValidationError("Дата начала тура должна быть раньше даты завершения.")
+
+
 class Tour(models.Model):
     author = models.ForeignKey(
         null=False,
@@ -87,6 +92,9 @@ class Tour(models.Model):
     class Meta:
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
+
+    def clean(self):
+        validator_date(self.start_date, self.end_date)
 
     def get_deposit(self):
         return self.price / self.max_number_of_tourists
