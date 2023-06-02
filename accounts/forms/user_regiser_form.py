@@ -5,13 +5,14 @@ from django.contrib.auth import get_user_model
 
 
 class UserRegisterForm(forms.ModelForm):
-    password = forms.CharField(required=True, widget=forms.PasswordInput)
-    password_confirm = forms.CharField(required=True, widget=forms.PasswordInput)
+    password = forms.CharField(required=True, widget=forms.PasswordInput, label='Create password')
+    password_confirm = forms.CharField(required=True, widget=forms.PasswordInput, label='Password confirm')
     is_guide = forms.BooleanField(required=False)
 
     class Meta:
         model = get_user_model()
         fields = ('email', 'first_name', 'last_name', 'password', 'password_confirm', 'is_guide')
+
 
     def clean(self):
         cleaned_data = super().clean()

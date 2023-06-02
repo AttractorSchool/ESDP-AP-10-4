@@ -1,10 +1,41 @@
 {% extends "base.html" %}
-{% load django_bootstrap5%}
+{% load django_bootstrap5 %}
+
+<title>{% block title %}Register{% endblock %}</title>
 
 {% block content %}
-    <form action="" method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% bootstrap_button button_type="submit" content="зарегестрироваться"%}
-    </form>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center">
+                <div class="col-lg-4 col-md-8 col-sm-11">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                <div class="form">
+                                    {% csrf_token %}
+                                    {% bootstrap_field form.email label='Email Address' placeholder="E-mail" %}
+                                    {% bootstrap_field form.first_name placeholder="Имя" %}
+                                    {% bootstrap_field form.last_name placeholder="Фамилия" %}
+                                    {% bootstrap_field form.password placeholder="Введите пароль" %}
+                                    {% bootstrap_field form.password_confirm placeholder="Подтвердите пароль" %}
+                                    {% bootstrap_button button_type='submit' content='Зарегистрироваться' button_class='btn-primary' %}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-5">
+            <div class="d-flex justify-content-center">
+                <div class="col-lg-4 col-md-8 col-sm-11">
+                    <div class="card ">
+                        <div class="card-body d-flex justify-content-center">
+                            Есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
