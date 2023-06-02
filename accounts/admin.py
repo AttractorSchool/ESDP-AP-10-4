@@ -15,11 +15,11 @@ class CustomAdmin(admin.ModelAdmin):
 
 @admin.register(GuideProfile)
 class GuideProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'verification_status', 'current_location')
+    list_display = ('id', 'user', 'verification_status')
     list_display_links = ['id']
     list_filter = ('user', 'verification_status', 'current_location')
     search_fields = ('id', 'user', 'verification_status')
-    list_editable = ('verification_status', 'current_location')
+    list_editable = ['verification_status']
 
     class Meta:
         verbose_name = 'Профиль'
