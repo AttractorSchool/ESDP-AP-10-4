@@ -2,29 +2,32 @@
 {% load static %}
 
 {% block title %}Гид{% endblock %}
+
 {% block menu %}
-{% if user.is_authenticated and user.profile == user_obj %}
+{% if user.is_authenticated and user.guide_profile == guide_profile %}
 <ul class="navbar-nav">
     <li>
-        <a class="nav_link" href="{% url "update_guide_profile" user_obj.id %}">Update profile</a>
+        <a class="nav_item" href="{% url "update_guide" user.pk %}">Update profile</a>
     </li>
 </ul>
 {% endif %}
 {% endblock %}
+
 {% block content %}
 <div class="profile-info__item">
     {% if user.is_authenticated %}
-        <p class="profile-info__description">{{ user_obj.get_full_name }}</p>
-    {% if user.guide_profile == user_obj %}
+        <p class="profile-info__description">{{ guide_profile.get_full_name }}</p>
+    {% if user.guide_profile == guide_profile %}
         <h2 class="profile-info__title">Вы на своей личной странице</h2>
     <h2 class="profile-info__title">Статус:</h2>
-        <p class="profile-info__description">{{ user_obj.verification_status }}</p>
+        <p class="profile-info__description">{{ guide_profile.verification_status }}</p>
     {% else %}
         <h2 class="profile-info__title">Вы на странице нашего гида:</h2>
     {% endif %}
 {% endif %}
-
 </div>
+
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
@@ -42,16 +45,18 @@
         </button>
     </li>
 </ul>
+
+
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="profile-info__item">
 
-            {% if user.is_authenticated and user.guide_profile == user_obj %}
+            {% if user.is_authenticated and user.guide_profile == guide_profile %}
             {% if is_verified %}
             <h2 class="profile-info__title">Пока нет Ваших туров.</h2>
-            <li>
-                <a class="nav_link" href="{% url 'tour_create' %}">Create Tour</a>
-            </li>
+{#            <li>#}
+{#                <a class="nav-item" href="{% url 'tour_create' %}">Create Tour</a>#}
+{#            </li>#}
             {% else %}
             <h2 class="profile-info__title">Пока нет возможности создать Тур</h2>
             {% endif %}
@@ -67,19 +72,19 @@
             <div class="profile-info">
                 <div class="profile-info__item">
                     <h2 class="profile-info__title">Дата рождения:</h2>
-                    <p class="profile-info__description">{{ user_obj.birthdate|date:'d.m.Y' }}</p>
+                    <p class="profile-info__description">{{ guide_profile.birthdate|date:'d.m.Y' }}</p>
                 </div>
                 <div class="profile-info__item">
                     <h2 class="profile-info__title">Текущая локация:</h2>
-                    <p class="profile-info__description">{{ user_obj.current_location }}</p>
+                    <p class="profile-info__description">{{ guide_profile.current_location }}</p>
                 </div>
                 <div class="profile-info__item">
                     <h2 class="profile-info__title">Языки:</h2>
-                    <p class="profile-info__description">{{ user_obj.languages }}</p>
+                    <p class="profile-info__description">{{ guide_profile.languages }}</p>
                 </div>
                 <div class="profile-info__item">
                     <h2 class="profile-info__title">О себе:</h2>
-                    <p class="profile-info__description">{{ user_obj.about }}</p>
+                    <p class="profile-info__description">{{ guide_profile.about }}</p>
                 </div>
             </div>
         </div>
@@ -89,7 +94,7 @@
             <div class="profile-info">
                 <div class="profile-info__item">
                     <h2 class="profile-info__title">Почта:</h2>
-                    <p class="profile-info__description">{{ user_obj.user.email }}</p>
+                    <p class="profile-info__description">{{ guide_profile.user.email }}</p>
                 </div>
                 <div class="profile-info__item">
                     <h2 class="profile-info__title">Номер телефона:</h2>

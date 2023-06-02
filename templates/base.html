@@ -16,7 +16,7 @@
             <ul class="navbar-nav">
                 {% if  user.is_authenticated and user.is_guide %}
                     <li>
-                        <a class="nav-link" href="{% url "tour_create" %}">Создать Тур</a>
+                        <a class="nav_item" href="{% url "tour_create" %}">Создать Тур</a>
                     </li>
                      <li class="nav-link">
                         <a href="{% url "guide-profile" user.guide_profile.pk %}">Личный кабинет</a>
@@ -24,14 +24,14 @@
                 {% endif %}
                 {% if user.is_authenticated %}
                     <li>
-                        <a class="nav-link" href="{% url "logout" %}">Выйти</a>
+                        <a class="nav-item" href="{% url "logout" %}">Выйти</a>
                     </li>
                 {% else %}
                     <li>
-                        <a class="nav-link" href="{% url "login" %}">Войти</a>
+                        <a class="nav-item" href="{% url "login" %}">Войти</a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{% url "register" %}">Зарегестрироваться</a>
+                        <a class="nav-item" href="{% url "register" %}">Зарегестрироваться</a>
                     </li>
                 {% endif %}
                 {% block menu %}

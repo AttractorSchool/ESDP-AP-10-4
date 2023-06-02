@@ -9,7 +9,7 @@ from accounts.models import GuideProfile
 class GuideProfileView(UserPassesTestMixin, DetailView):
     model = GuideProfile
     template_name = 'account/guide_profile.html'
-    context_object_name = 'user_obj'
+    context_object_name = 'guide_profile'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
