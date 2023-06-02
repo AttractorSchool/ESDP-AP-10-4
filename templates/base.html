@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>{% block title %} Tours {% endblock %}</title>
 </head>
 <body>
@@ -14,14 +15,8 @@
         <a class="navbar-brand" href="{% url 'tour_list' %}">KZ TOURS</a>
         <div class="" id="navbarNav">
             <ul class="navbar-nav">
-                {% if  user.is_authenticated and user.is_guide %}
-                    <li>
-                        <a class="nav-link" href="{% url "tour_create" %}">Создать Тур</a>
-                    </li>
-                     <li>
-                        <a class="nav-link" href="{% url "guide-profile" user.guide_profile.pk %}">Личный кабинет</a>
-                    </li>
-                {% endif %}
+                {% block menu %}
+                {% endblock %}
                 {% if user.is_authenticated %}
                     <li>
                         <a class="nav-link" href="{% url "logout" %}">Выйти</a>
@@ -34,8 +29,6 @@
                         <a class="nav-link" href="{% url "register" %}">Зарегестрироваться</a>
                     </li>
                 {% endif %}
-                {% block menu %}
-                {% endblock %}
             </ul>
         </div>
     </div>
