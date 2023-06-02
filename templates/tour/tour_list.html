@@ -6,14 +6,7 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
-{% block menu %}
-    {% if  user.is_authenticated and user.is_guide %}
 
-        <li>
-            <a class="nav-link" href="{% url "guide-profile" user.guide_profile.pk %}">Личный кабинет</a>
-        </li>
-    {% endif %}
-{% endblock %}
 
 
 
