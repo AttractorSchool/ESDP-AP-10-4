@@ -7,7 +7,7 @@
 {% if user.is_authenticated and user.guide_profile == guide_profile %}
 <ul class="navbar-nav">
     <li>
-        <a class="nav_item" href="{% url "update_guide" user.pk %}">Update profile</a>
+        <a class="nav-link" href="{% url "update_guide" user.pk %}">Update profile</a>
     </li>
 </ul>
 {% endif %}
@@ -29,18 +29,18 @@
 
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+    <li class="nav-item " role="presentation">
+        <button class="nav-link active tab-pofile-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
                 type="button" role="tab" aria-controls="pills-home" aria-selected="true">Туры
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile" type="button"
+        <button class="nav-link tab-pofile-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile" type="button"
                 role="tab" aria-controls="profile" aria-selected="false">Профиль
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+        <button class="nav-link tab-pofile-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
                 type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Контакт
         </button>
     </li>
