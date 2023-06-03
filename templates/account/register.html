@@ -13,12 +13,7 @@
                             <form action="" method="POST" enctype="multipart/form-data">
                                 <div class="form">
                                     {% csrf_token %}
-                                    {% bootstrap_field form.email label='Email Address' placeholder="E-mail" %}
-                                    {% bootstrap_field form.first_name placeholder="Имя" %}
-                                    {% bootstrap_field form.last_name placeholder="Фамилия" %}
-                                    {% bootstrap_field form.password placeholder="Введите пароль" %}
-                                    {% bootstrap_field form.password_confirm placeholder="Подтвердите пароль" %}
-                                    {% bootstrap_field form.is_guide placeholder="" %}
+                                    {% bootstrap_form form %}
                                     {% bootstrap_button button_type='submit' content='Зарегистрироваться' button_class='btn-primary' %}
                                 </div>
                             </form>

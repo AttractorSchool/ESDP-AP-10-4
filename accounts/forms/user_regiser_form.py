@@ -13,7 +13,6 @@ class UserRegisterForm(forms.ModelForm):
         model = get_user_model()
         fields = ('email', 'first_name', 'last_name', 'password', 'password_confirm', 'is_guide')
 
-
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
