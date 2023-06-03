@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import User, GuideProfile
-from .utils import create_profile
+from .utils import create_user, create_profile
+
 
 
 # Register your models here.
@@ -9,7 +10,8 @@ from .utils import create_profile
 class CustomAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
-        create_profile(form)
+        user = create_user(form)
+        create_profile(user)
         super().save_model(request, obj, form, change)
 
 

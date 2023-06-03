@@ -1,5 +1,7 @@
+from audioop import reverse
+
 from accounts.forms import UserRegisterForm
-from accounts.utils import create_profile
+from accounts.utils import create_user, create_profile
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.views.generic import CreateView
@@ -14,8 +16,10 @@ class RegisterView(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = create_profile(form)
+            user = form.save()
+            create_profile(user)
+            print(user)
             login(request, user)
-            return redirect('/admin')
+            return redirect('tour_list')
         self.context['form'] = form
         return self.render_to_response(self.context)
