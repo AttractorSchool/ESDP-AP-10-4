@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 
 from accounts.forms import UserLoginForm
@@ -8,7 +9,7 @@ from accounts.forms import UserLoginForm
 class LoginView(FormView):
     form_class = UserLoginForm
     template_name = 'account/login.html'
-    success_url = 'tour_list'
+    success_url = reverse_lazy('tour_list')
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()

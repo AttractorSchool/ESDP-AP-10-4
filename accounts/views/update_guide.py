@@ -19,7 +19,7 @@ class UpdateGuide(UserPassesTestMixin, UpdateView):
     model = get_user_model()
     form_class = UserUpdateForm
     template_name = 'account/update_guide.html'
-    context_object_name = 'form'
+    context_object_name = 'user_obj'
     success_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -53,13 +53,9 @@ class UpdateGuide(UserPassesTestMixin, UpdateView):
             form_kwargs['files'] = self.request.FILES
         return GuideProfileUpdateForm(**form_kwargs)
 
-
-
     def test_func(self):
         if self.request.user == self.get_object():
             if self.get_object().guide_profile.verification_status in ALLOWED_TO_EDIT:
                 return True
-            else:
-                return False
-        else:
-            return False
+
+        return False
