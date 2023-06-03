@@ -18,7 +18,7 @@ class UserRegisterForm(forms.ModelForm):
         password = cleaned_data.get('password')
         password_confirm = cleaned_data.get('password_confirm')
         if password_confirm and password and password != password_confirm:
-            raise ValidationError('Пароли не совпадают')
+            raise ValidationError('')
 
     def save(self, commit=True):
         user = super().save(commit=False)
