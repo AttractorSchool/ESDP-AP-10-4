@@ -32,7 +32,7 @@ class UpdateGuide(UserPassesTestMixin, UpdateView):
         self.object.guide_profile.verification_status = StatusChoice.SENT_TO_VERIFICATION
         form = self.get_form()
         profile_form = self.get_profile_form()
-        if form.is_valid():
+        if form.is_valid() and profile_form.is_valid():
             return self.form_valid(form, profile_form)
         else:
             return self.form_invalid(form, profile_form)

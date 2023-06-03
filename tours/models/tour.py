@@ -97,19 +97,19 @@ class Tour(models.Model):
         validator_date(self.start_date, self.end_date)
 
     def get_deposit(self):
-        return self.price / self.max_number_of_tourists
+        return round(self.price / self.max_number_of_tourists)
 
     def get_grand_total(self):
         tourists_count = self.tourists.count() + 1
         if tourists_count == 0:
             return self.price
 
-        return round(self.price / tourists_count, 2)
+        return round(self.price / tourists_count)
 
     def get_grand_total_for_booking(self):
         tourists_count = self.tourists.count()
         grand_total = (self.price / tourists_count) - self.get_deposit()
-        return round(grand_total, 2)
+        return round(grand_total)
 
     def __str__(self):
         return f'Tour {self.title} by {self.author}'

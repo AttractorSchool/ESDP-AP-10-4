@@ -1,16 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Турист{% endblock %}
-{% block menu %}
-{% if user.is_authenticated and user.profile == user_obj %}
-<!--<ul class="navbar-nav">-->
-<!--    <li>-->
-<!--        <a class="nav_link" href="{% url "update_guide_profile" user_obj.id %}">Update profile</a>-->
-<!--    </li>-->
-<!--</ul>-->
-{% endif %}
-{% endblock %}
+{% block title %}{{ user_obj.get_full_name }}{% endblock %}
+
+
 {% block content %}
 <div class="profile-info__item">
     {% if user.is_authenticated %}

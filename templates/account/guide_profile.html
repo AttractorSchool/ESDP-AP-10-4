@@ -1,20 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Гид{% endblock %}
+{% block title %} {{ user_obj.get_full_name }}{% endblock %}
 
-{% block menu %}
-    {% if user.is_authenticated and user.guide_profile == guide_profile %}
-        <ul class="navbar-nav">
-            <li>
-                <a class="nav-link" href="{% url "tour_create" %}">Создать Тур</a>
-            </li>
-            <li>
-                <a class="nav-link" href="{% url "update_guide" user.pk %}">Обновить профиль</a>
-            </li>
-        </ul>
-    {% endif %}
-{% endblock %}
 
 {% block content %}
     <div class="profile-info__item">
@@ -59,17 +47,16 @@
 
                 {% if user.is_authenticated and user.guide_profile == guide_profile %}
                     {% if is_verified %}
-                        <h2 class="profile-info__title">Пока нет Ваших туров.</h2>
-                        {#            <li>#}
-                        {#                <a class="nav-item" href="{% url 'tour_create' %}">Create Tour</a>#}
-                        {#            </li>#}
+                        <h2 class="profile-info__title">Создайте свой первый тур</h2>
+                                    <li>
+                                        <a class="nav-item" href="{% url 'tour_create' %}">Создать</a>
+                                    </li>
                     {% else %}
                         <h2 class="profile-info__title">Пока нет возможности создать Тур</h2>
                     {% endif %}
                 {% else %}
                     <h2 class="profile-info__title">У данного Гида пока нет туров.</h2>
                 {% endif %}
-
 
             </div>
         </div>
@@ -78,7 +65,7 @@
                 <div class="profile-info">
                     <div class="profile-info__item">
                         <h2 class="profile-info__title">Дата рождения:</h2>
-                        <p class="profile-info__description">{{ guide_profile.birthdate|date:'d.m.Y' }}</p>
+                        <p class="profile-info__description">{{ guide_profile.user.birthdate }}</p>
                     </div>
                     <div class="profile-info__item">
                         <h2 class="profile-info__title">Текущая локация:</h2>
@@ -92,6 +79,11 @@
                         <h2 class="profile-info__title">О себе:</h2>
                         <p class="profile-info__description">{{ guide_profile.about }}</p>
                     </div>
+{#                    отображать только если хозяин профиля#}
+                    <div class="profile-info__item">
+                        <a class="btn btn-primary" href="{% url "update_guide" user.pk %}" role="button">  обновить профиль </a>
+                    </div>
+
                 </div>
             </div>
         </div>

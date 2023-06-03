@@ -7,22 +7,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <title>{% block title %} Tours {% endblock %}</title>
-    {% block css %}
 
+    {% block css %}
     {% endblock %}
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'tour_list' %}">KZ TOURS</a>
+        <a class="navbar-brand" href="{% url 'tour_list' %}">Journey</a>
         <div class="" id="navbarNav">
             <ul class="navbar-nav">
-                {% block menu %}
-                {% endblock %}
                 {% if user.is_authenticated %}
                     <li>
                         <a class="nav-link" href="{% url "logout" %}">Выйти</a>
                     </li>
+                    {% block menu %}
+                        {% if user.is_guide %}
+                            <li>
+                                <a class="nav-link" href="{% url "guide_profile" user.guide_profile.pk %}"> {{ user.email }}</a>
+                            </li>
+                        {% else %}
+{#                              <li>#}
+{#                                <a class="nav-link" href="{% url "guide_profile" user.pk %}">ЛК</a>#}
+{#                            </li>#}
+                        {% endif %}
+                    {% endblock %}
                 {% else %}
                     <li>
                         <a class="nav-link" href="{% url "login" %}">Войти</a>
