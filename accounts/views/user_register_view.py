@@ -22,4 +22,6 @@ class RegisterView(CreateView):
             login(request, user)
             return redirect('tour_list')
         self.context['form'] = form
+        form.add_error('password', '')
+        form.add_error('password_confirm', 'Пароли не совпадают')
         return self.render_to_response(self.context)
