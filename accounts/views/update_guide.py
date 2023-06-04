@@ -11,7 +11,6 @@ from accounts.forms import GuideProfileUpdateForm
 ALLOWED_TO_EDIT = [
     StatusChoice.NOT_VERIFIED,
     StatusChoice.SENT_TO_REWORK,
-    StatusChoice.CONFIRMED,
 ]
 
 
