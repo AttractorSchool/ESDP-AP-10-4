@@ -9,6 +9,11 @@ ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
 ]
 
+ALLOWED_TO_EDIT = [
+    StatusChoice.NOT_VERIFIED,
+    StatusChoice.SENT_TO_REWORK,
+]
+
 
 class TourListView(ListView):
     model = Tour
@@ -66,11 +71,16 @@ class TourUpdateView(UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse('tour_detail', kwargs={'pk': self.object.pk})
 
+    def form_valid(self, form):
+        form.instance.moderation_status = StatusChoice.SENT_TO_VERIFICATION
+        return super().form_valid(form)
+
     def test_func(self):
-        if self.get_object().author == self.request.user \
-                and self.get_object().moderation_status == StatusChoice.CONFIRMED:
-            return True
+        if self.get_object().author == self.request.user:
+            if self.get_object().moderation_status in ALLOWED_TO_EDIT:
+                return True
         return False
+
 
 
 class TourDeleteView(UserPassesTestMixin, DeleteView):
