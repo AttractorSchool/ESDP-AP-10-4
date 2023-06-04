@@ -59,7 +59,7 @@
                         <h2 class="profile-info__title">Пока нет возможности создать Тур</h2>
                     {% endif %}
                 {% else %}
-                    {% if guide_confirmed_tours.len > 0 %}
+                    {% if guide_confirmed_tours %}
                         {% for tour in guide_confirmed_tours %}
                             {% include "tour/includes/tour_card.html" %}
                         {% endfor %}
