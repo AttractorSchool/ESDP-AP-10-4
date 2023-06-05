@@ -8,6 +8,7 @@ from .utils import create_user, create_profile
 # Register your models here.
 @admin.register(User)
 class CustomAdmin(admin.ModelAdmin):
+    exclude = ('is_guide', 'is_tourist')
 
     def save_model(self, request, obj, form, change):
         user = create_user(form)
