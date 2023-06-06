@@ -8,49 +8,42 @@ class GuideProfile(models.Model):
         to=get_user_model(),
         related_name='guide_profile',
         on_delete=models.CASCADE,
-        verbose_name='Пользователь',
-    )
+        verbose_name='Пользователь')
 
     verification_status = models.CharField(
         max_length=256,
         null=False,
         choices=StatusChoice.choices,
-        default=StatusChoice.NOT_VERIFIED,
-    )
+        default=StatusChoice.NOT_VERIFIED)
 
     current_location = models.CharField(
         null=False,
         blank=False,
-        max_length=512,
-    )
+        max_length=512)
 
     languages = models.CharField(
         null=False,
         blank=False,
         max_length=512,
-        verbose_name='Языки',
-    )
+        verbose_name='Языки')
 
     about = models.TextField(
         null=False,
         blank=False,
         max_length=2048,
-        verbose_name='О себе',
-    )
+        verbose_name='О себе')
 
     experience_resume = models.FileField(
         null=False,
         blank=False,
         upload_to='experience_resumes',
-        verbose_name='Резюме с опытом',
-    )
+        verbose_name='Резюме с опытом')
 
     certificates = models.FileField(
         null=False,
         blank=False,
         upload_to='certificates',
-        verbose_name='Сертификаты',
-    )
+        verbose_name='Сертификаты')
 
     bank_details = models.CharField(
         null=False,
