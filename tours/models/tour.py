@@ -14,7 +14,7 @@ def date_validation(value):
 
 def validator_date(start_date, end_date):
     if start_date > end_date:
-        raise ValidationError("Дата начала тура должна быть раньше даты завершения.")
+        raise ValidationError('Дата начала тура должна быть раньше даты завершения.')
 
 
 class Tour(models.Model):

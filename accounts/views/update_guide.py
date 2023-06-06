@@ -1,12 +1,12 @@
-from django.contrib.auth import get_user_model
-
-from accounts.forms.user_update_form import UserUpdateForm
 from choices import StatusChoice
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
 from accounts.forms import GuideProfileUpdateForm
+from accounts.forms.user_update_form import UserUpdateForm
+
 
 ALLOWED_TO_EDIT = [
     StatusChoice.NOT_VERIFIED,

@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from tours.models.tour import Tour
 
 
@@ -41,10 +40,12 @@ class TourCreateForm(forms.ModelForm):
         end_date = cleaned_data.get('end_date')
 
         if start_date > end_date:
-            raise forms.ValidationError("Дата завершения тура не может быть больше даты начала!")
+            raise forms.ValidationError('Дата завершения тура не может быть больше даты начала!')
 
         max_number_of_tourists = cleaned_data.get('max_number_of_tourists')
         min_number_of_tourists = cleaned_data.get('min_number_of_tourists')
 
         if max_number_of_tourists < min_number_of_tourists:
-            raise forms.ValidationError("Минимальное количество людей не может быть больше максимального!.")
+            raise forms.ValidationError(
+                'Минимальное количество людей не может быть больше максимального!',
+            )

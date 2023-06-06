@@ -82,7 +82,6 @@ class TourUpdateView(UserPassesTestMixin, UpdateView):
         return False
 
 
-
 class TourDeleteView(UserPassesTestMixin, DeleteView):
     model = Tour
 

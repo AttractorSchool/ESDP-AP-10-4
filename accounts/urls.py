@@ -1,9 +1,8 @@
 from django.urls import path
 
-from .views import RegisterView
 from .views import LoginView, logout_view
+from .views import RegisterView
 from .views.guide_profile_index import GuideProfileView
-from .views.tourist_profile_view import TouristDetailView
 from .views.update_guide import UpdateGuide
 
 
