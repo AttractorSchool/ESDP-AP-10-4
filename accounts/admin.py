@@ -1,28 +1,54 @@
+from choices import StatusChoice
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from .models import CustomUser, Profile
-from .utils import create_profile
+from .models import GuideProfile, User
+from .utils import create_profile, create_user
+
+
+ALLOWED_TO_EDIT = [
+    StatusChoice.NOT_VERIFIED,
+    StatusChoice.SENT_TO_REWORK,
+    StatusChoice.SENT_TO_VERIFICATION,
+    StatusChoice.REFUSED,
+]
 
 
 # Register your models here.
-@admin.register(CustomUser)
+@admin.register(User)
 class CustomAdmin(admin.ModelAdmin):
+    exclude = ('is_guide', 'is_tourist', 'password')
 
     def save_model(self, request, obj, form, change):
-        create_profile(form)
+        if get_user_model().objects.filter(pk=obj.pk):
+            return obj.save()
+        user = create_user(form)
+        create_profile(user)
         super().save_model(request, obj, form, change)
 
 
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'is_guide', 'verification_status', 'current_location')
+@admin.register(GuideProfile)
+class GuideProfileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'verification_status')
     list_display_links = ['id']
-    list_filter = ('user', 'is_guide', 'verification_status', 'current_location')
-    search_fields = ('id', 'user', 'is_guide', 'verification_status')
-    list_editable = ('is_guide', 'verification_status', 'current_location')
+    list_filter = ('user', 'verification_status', 'current_location')
+    search_fields = ('id', 'user', 'verification_status')
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            if obj and obj.verification_status in ALLOWED_TO_EDIT:
+                return True
+        return super().has_change_permission(request, obj)
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = super().get_readonly_fields(request, obj)
+
+        if request.user.is_superuser:
+            if obj and obj.verification_status == StatusChoice.CONFIRMED:
+                readonly_fields += ('verification_status',)
+
+        return readonly_fields
 
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
-
-
-admin.site.register(Profile, ProfileAdmin)

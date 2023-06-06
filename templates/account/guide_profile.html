@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ user_obj.get_full_name }}{% endblock %}
+
+{#ПРОФИЛЬ ГИДА#}
+
+{#  ШАПКА ПРОФИЛЯ #}
+{% block content %}
+    <div class="profile-info__item">
+        {% if user.guide_profile == guide_profile %}
+            <h2 class="profile-info__title">Ваш профиль {{ guide_profile.user.get_full_name }}</h2>
+            <h2 class="profile-info__title">Статус: </h2>
+            <p class="profile-info__description">{{ guide_profile.verification_status }}</p>
+        {% else %}
+            <h2 class="profile-info__title">Гид {{ guide_profile.user.get_full_name }} </h2>
+        {% endif %}
+    </div>
+
+    {# ТАБЫ #}
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item " role="presentation">
+            <button class="nav-link active tab-pofile-link" id="pills-home-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-home"
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Туры
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link tab-pofile-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile"
+                    type="button"
+                    role="tab" aria-controls="profile" aria-selected="false">Профиль
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link tab-pofile-link" id="pills-contact-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-contact"
+                    type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Контакты
+            </button>
+        </li>
+    </ul>
+
+    {# КОНТЕНТ ТАБОВ #}
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <div class="profile-info__item">
+                {% if user.guide_profile == guide_profile %}
+                    {% if is_verified and not guide_tours %}
+                        <h2 class="profile-info__title">Создайте свой первый тур</h2>
+                        <a class="nav-item" role="button" href="{% url 'tour_create' %}">Создать</a>
+                    {% elif is_verified and guide_tours %}
+                        {% for tour in guide_tours %}
+                            {% include "tour/includes/tour_card.html" %}
+                        {% endfor %}
+                        <a class="nav-item btn btn-success" role="button" href="{% url 'tour_create' %}">Создать еще</a>
+                    {% else %}
+                        {% for tour in guide_tours %}
+                            {% include "tour/includes/tour_card.html" %}
+                        {% endfor %}
+                        <h2 class="profile-info__title">Пока нет возможности создать Тур</h2>
+                    {% endif %}
+                {% else %}
+                    {% if guide_confirmed_tours %}
+                        {% for tour in guide_confirmed_tours %}
+                            {% include "tour/includes/tour_card.html" %}
+                        {% endfor %}
+                    {% else %}
+                        <h2 class="profile-info__title">У данного Гида пока нет туров.</h2>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="container">
+                <div class="profile-info">
+                    <div class="profile-info__item">
+                        <h2 class="profile-info__title">Дата рождения:</h2>
+                        <p class="profile-info__description">{{ guide_profile.user.birthdate }}</p>
+                    </div>
+                    <div class="profile-info__item">
+                        <h2 class="profile-info__title">Текущая локация:</h2>
+                        <p class="profile-info__description">{{ guide_profile.current_location }}</p>
+                    </div>
+                    <div class="profile-info__item">
+                        <h2 class="profile-info__title">Языки:</h2>
+                        <p class="profile-info__description">{{ guide_profile.languages }}</p>
+                    </div>
+                    <div class="profile-info__item">
+                        <h2 class="profile-info__title">О себе:</h2>
+                        <p class="profile-info__description">{{ guide_profile.about }}</p>
+                    </div>
+
+                    {% if user == guide_profile.user %}
+                        <div class="profile-info__item">
+                            <a class="btn btn-primary" href="{% url "update_guide" guide_profile.user.pk %}"
+                               role="button"> обновить профиль </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+            <div class="container">
+                <div class="profile-info">
+                    <div class="profile-info__item">
+                        <h2 class="profile-info__title">Почта:</h2>
+                        <p class="profile-info__description">{{ guide_profile.user.email }}</p>
+                    </div>
+                    <div class="profile-info__item">
+                        <h2 class="profile-info__title">Номер телефона:</h2>
+                        <p class="profile-info__description">скоро появится...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'my_scripts/script_1.js' %}"></script>
+{% endblock %}
+

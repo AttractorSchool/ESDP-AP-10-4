@@ -3,63 +3,52 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 
-class Profile(models.Model):
+class GuideProfile(models.Model):
     user = models.OneToOneField(
         to=get_user_model(),
-        related_name='profile',
+        related_name='guide_profile',
         on_delete=models.CASCADE,
-        verbose_name='Пользователь',
-    )
-
-    is_guide = models.BooleanField(null=False, default=False)
+        verbose_name='Пользователь')
 
     verification_status = models.CharField(
         max_length=256,
         null=False,
         choices=StatusChoice.choices,
-        default=StatusChoice.NOT_VERIFIED,
-    )
+        default=StatusChoice.NOT_VERIFIED)
 
     current_location = models.CharField(
-        null=True,
+        null=False,
         blank=False,
-        max_length=512,
-    )
-
-    birthdate = models.DateField(null=True, blank=False)
+        max_length=512)
 
     languages = models.CharField(
-        null=True,
+        null=False,
         blank=False,
         max_length=512,
-        verbose_name='Языки',
-    )
+        verbose_name='Языки')
 
     about = models.TextField(
-        null=True,
+        null=False,
         blank=False,
         max_length=2048,
-        verbose_name='О себе',
-    )
+        verbose_name='О себе')
 
     experience_resume = models.FileField(
-        null=True,
+        null=False,
         blank=False,
         upload_to='experience_resumes',
-        verbose_name='Резюме с опытом',
-    )
+        verbose_name='Резюме с опытом')
 
     certificates = models.FileField(
-        null=True,
+        null=False,
         blank=False,
         upload_to='certificates',
-        verbose_name='Сертификаты',
-    )
+        verbose_name='Сертификаты')
 
     bank_details = models.CharField(
-        null=True,
+        null=False,
         blank=False,
         max_length=512)
 
     def __str__(self):
-        return f'User: {self.user} | Is Guide:{self.is_guide} | Status: {self.verification_status}'
+        return f'Гид: {self.user} | Status: {self.verification_status}'

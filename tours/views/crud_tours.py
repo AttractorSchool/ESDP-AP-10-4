@@ -9,11 +9,16 @@ ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
 ]
 
+ALLOWED_TO_EDIT = [
+    StatusChoice.NOT_VERIFIED,
+    StatusChoice.SENT_TO_REWORK,
+]
+
 
 class TourListView(ListView):
     model = Tour
     context_object_name = 'tours'
-    template_name = 'tour_list.html'
+    template_name = 'tour/tour_list.html'
 
     def get_queryset(self):
         queryset = super(TourListView, self).get_queryset()
@@ -21,7 +26,7 @@ class TourListView(ListView):
 
 
 class TourCreateView(UserPassesTestMixin, CreateView):
-    template_name = 'tour_create.html'
+    template_name = 'tour/tour_create.html'
     model = Tour
     form_class = TourCreateForm
 
@@ -35,8 +40,8 @@ class TourCreateView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         if self.request.user.is_authenticated:
-            if self.request.user.profile.is_guide \
-                    and self.request.user.profile.verification_status == StatusChoice.CONFIRMED:
+            if self.request.user.is_guide \
+                    and self.request.user.guide_profile.verification_status == StatusChoice.CONFIRMED:
                 return True
         else:
             return False
@@ -44,7 +49,7 @@ class TourCreateView(UserPassesTestMixin, CreateView):
 
 
 class TourDetailView(UserPassesTestMixin, DetailView):
-    template_name = 'tour_detail.html'
+    template_name = 'tour/tour_detail.html'
     model = Tour
     context_object_name = 'tour'
 
@@ -59,17 +64,21 @@ class TourDetailView(UserPassesTestMixin, DetailView):
 
 
 class TourUpdateView(UserPassesTestMixin, UpdateView):
-    template_name = 'tour_update.html'
+    template_name = 'tour/tour_update.html'
     model = Tour
     form_class = TourCreateForm
 
     def get_success_url(self):
         return reverse('tour_detail', kwargs={'pk': self.object.pk})
 
+    def form_valid(self, form):
+        form.instance.moderation_status = StatusChoice.SENT_TO_VERIFICATION
+        return super().form_valid(form)
+
     def test_func(self):
-        if self.get_object().author == self.request.user \
-                and self.get_object().moderation_status == StatusChoice.CONFIRMED:
-            return True
+        if self.get_object().author == self.request.user:
+            if self.get_object().moderation_status in ALLOWED_TO_EDIT:
+                return True
         return False
 
 

@@ -1,13 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
-from django.views import View
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 
 from accounts.forms import UserLoginForm
 
 
-class LoginView(View):
+class LoginView(FormView):
     form_class = UserLoginForm
-    template_name = 'login.html'
+    template_name = 'account/login.html'
+    success_url = reverse_lazy('tour_list')
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -21,8 +23,14 @@ class LoginView(View):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
-        return render(request, self.template_name, {'form': form})
+                return self.form_valid(form)
+        form.add_error('email', 'Неправильный Email или пароль')
+        form.add_error('password', '')
+        return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
 
 
 def logout_view(request):

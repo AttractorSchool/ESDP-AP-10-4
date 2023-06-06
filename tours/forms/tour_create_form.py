@@ -33,3 +33,19 @@ class TourCreateForm(forms.ModelForm):
                 format=('%Y-%m-%d'),
                 attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date > end_date:
+            raise forms.ValidationError('Дата завершения тура не может быть больше даты начала!')
+
+        max_number_of_tourists = cleaned_data.get('max_number_of_tourists')
+        min_number_of_tourists = cleaned_data.get('min_number_of_tourists')
+
+        if max_number_of_tourists < min_number_of_tourists:
+            raise forms.ValidationError(
+                'Минимальное количество людей не может быть больше максимального!',
+            )

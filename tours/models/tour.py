@@ -12,6 +12,11 @@ def date_validation(value):
         raise ValidationError('Нельзя выбрать дату из прошлого!')
 
 
+def validator_date(start_date, end_date):
+    if start_date > end_date:
+        raise ValidationError('Дата начала тура должна быть раньше даты завершения.')
+
+
 class Tour(models.Model):
     author = models.ForeignKey(
         null=False,
@@ -77,10 +82,34 @@ class Tour(models.Model):
         auto_now=True,
         verbose_name='Дата и время обновления',
     )
+    tourists = models.ManyToManyField(
+        to=get_user_model(),
+        through='booking.Booking',
+        related_name='booked_tour',
+        through_fields=('tour', 'user'),
+    )
 
     class Meta:
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
+
+    def clean(self):
+        validator_date(self.start_date, self.end_date)
+
+    def get_deposit(self):
+        return round(self.price / self.max_number_of_tourists)
+
+    def get_grand_total(self):
+        tourists_count = self.tourists.count() + 1
+        if tourists_count == 0:
+            return self.price
+
+        return round(self.price / tourists_count)
+
+    def get_grand_total_for_booking(self):
+        tourists_count = self.tourists.count()
+        grand_total = (self.price / tourists_count) - self.get_deposit()
+        return round(grand_total)
 
     def __str__(self):
         return f'Tour {self.title} by {self.author}'

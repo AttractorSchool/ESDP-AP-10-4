@@ -1,0 +1,11 @@
+.card{
+    background-image: url('https://astanatimes.com/wp-content/uploads/2021/06/1566811997_news_b-800x446.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: brightness(80%);
+    padding:35px 0;
+}
+
+.card-body{
+    color: white;
+}
