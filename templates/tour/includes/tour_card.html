@@ -1,8 +1,14 @@
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">{{ tour.title }}</h5>
-        <p class="card-text">{{ tour.description }}</p>
-        <p class="card-text">{{ tour.price }} тенге</p>
-        <a href="{% url 'tour_detail' tour.pk %}" class="btn btn-primary">Подробнее</a>
+<div class="card rounded-4 monserat-regular-font">
+    <img class="card-img-top rounded-4" src="https://media.timeout.com/images/105658195/image.jpg" alt="img">
+    <div class="card-img-overlay text-white p-4 d-flex flex-column justify-content-end">
+        <div class="info pb-4">
+            <h4 class="card-title">{{ tour.title }}</h4>
+            <p class="card-text">{{ tour.description | truncatewords:10 }}</p>
+        </div>
+
+        <div class="bottom d-flex justify-content-between align-items-center">
+            <p class="card-text">{{ tour.price }}тг</p>
+            <a href="{% url 'tour_detail' tour.pk %}" class="cascadia-font btn px-3 rounded-3 border border-2 btn-outline-light">Подробнее</a>
+        </div>
     </div>
 </div>

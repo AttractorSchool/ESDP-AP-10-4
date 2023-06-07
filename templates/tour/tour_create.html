@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 {% load django_bootstrap5%}
 
-{% block menu %}
-    <li>
-        <a class="nav-link" href="{% url "guide_profile" user.guide_profile.pk %}">Личный кабинет</a>
-    </li>
-{% endblock %}
 
 {% block content %}
     <form action="{% url 'tour_create' %}" method="POST">

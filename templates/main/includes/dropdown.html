@@ -1,0 +1,23 @@
+<div class="dropdown">
+    <button class="btn rounded-3 text-dark btn-light fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="cascadia-font">{{ user.email }}</span>
+    </button>
+
+    <ul class="dropdown-menu cascadia-font">
+        <li>
+            {% if user.is_guide %}
+                <a class="dropdown-item" href="{% url "guide_profile" user.guide_profile.pk %}">
+                    <span>Личный кабинет</span>
+                </a>
+            {% else %}
+                <a class='dropdown-item' href="#">
+                    <span>Личный кабинет</span>
+                </a>
+            {% endif %}
+        </li>
+
+        <li><a class="dropdown-item" href="{% url 'tour_create' %}">Создать Тур</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Выйти</a></li>
+    </ul>
+</div>
