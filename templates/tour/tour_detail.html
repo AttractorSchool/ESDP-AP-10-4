@@ -32,9 +32,11 @@
                         </p>
                     {% endif %}
                     {% if user == tour.author %}
-                        <p>Статус: {{ tour.get_moderation_status_display }}</p>
+                        <p>Статус: {{ tour.get_moderation_status_display }} </p>
                         <p class="card-text"><small class="text-muted">Обновлено: {{ tour.updated_at }}</small></p>
                         <a class="nav-item btn btn-success" role="button" href="{% url 'tour_update' tour.pk %}">Обновить тур</a>
+                    {% elif tour.moderation_status == 'FINISHED' %}
+                        <p><b style="color: red;">{{ tour.get_moderation_status_display }}</b></p>
                     {% endif %}
 
                 </div>

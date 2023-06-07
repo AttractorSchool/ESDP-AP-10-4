@@ -1,5 +1,8 @@
+from datetime import datetime, timedelta
+
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from tours.forms.tour_create_form import TourCreateForm
@@ -7,6 +10,7 @@ from tours.models.tour import Tour
 
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
+    StatusChoice.FINISHED,
 ]
 
 ALLOWED_TO_EDIT = [
@@ -20,12 +24,21 @@ class TourListView(ListView):
     context_object_name = 'tours'
     template_name = 'tour/tour_list.html'
 
+    def get(self, request, *args, **kwargs):
+        tours = Tour.objects.all()
+        today = datetime.now() + timedelta(hours=6)
+        for tour in tours:
+            if today.strftime('%Y-%m-%d %H:%M') >= tour.end_date.strftime('%Y-%m-%d %H:%M'):
+                tour.moderation_status = StatusChoice.FINISHED
+            tour.save()
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         queryset = super(TourListView, self).get_queryset()
         return queryset.filter(moderation_status='CONFIRMED')
 
 
-class TourCreateView(UserPassesTestMixin, CreateView):
+class TourCreateView(CreateView):
     template_name = 'tour/tour_create.html'
     model = Tour
     form_class = TourCreateForm
@@ -52,6 +65,14 @@ class TourDetailView(UserPassesTestMixin, DetailView):
     template_name = 'tour/tour_detail.html'
     model = Tour
     context_object_name = 'tour'
+
+    def get(self, request, pk, *args, **kwargs):
+        tour = get_object_or_404(self.model, pk=pk)
+        today = datetime.now() + timedelta(hours=6)
+        if today.strftime('%Y-%m-%d %H:%M') >= tour.end_date.strftime('%Y-%m-%d %H:%M'):
+            tour.moderation_status = StatusChoice.FINISHED
+        tour.save()
+        return super().get(request, *args, **kwargs)
 
     def test_func(self):
         if self.request.user == self.get_object().author:
@@ -80,7 +101,6 @@ class TourUpdateView(UserPassesTestMixin, UpdateView):
             if self.get_object().moderation_status in ALLOWED_TO_EDIT:
                 return True
         return False
-
 
 
 class TourDeleteView(UserPassesTestMixin, DeleteView):

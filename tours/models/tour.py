@@ -8,13 +8,15 @@ from django.db import models
 
 
 def date_validation(value):
-    if value < datetime.date.today():
+    value_str = value.strftime('%Y-%m-%d %H:%M')
+    datetime_now_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    if value_str < datetime_now_str:
         raise ValidationError('Нельзя выбрать дату из прошлого!')
 
 
 def validator_date(start_date, end_date):
     if start_date > end_date:
-        raise ValidationError("Дата начала тура должна быть раньше даты завершения.")
+        raise ValidationError('Дата начала тура должна быть раньше даты завершения.')
 
 
 class Tour(models.Model):
@@ -38,13 +40,13 @@ class Tour(models.Model):
         blank=False,
         verbose_name='Описание',
     )
-    start_date = models.DateField(
+    start_date = models.DateTimeField(
         auto_now_add=False,
         auto_now=False,
         verbose_name='Дата старта',
         validators=[date_validation],
     )
-    end_date = models.DateField(
+    end_date = models.DateTimeField(
         auto_now_add=False,
         auto_now=False,
         verbose_name='Дата завершения',
@@ -92,6 +94,9 @@ class Tour(models.Model):
     class Meta:
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
+
+    def __int__(self):
+        self.moderation_status = self.get_moderation_status()
 
     def clean(self):
         validator_date(self.start_date, self.end_date)

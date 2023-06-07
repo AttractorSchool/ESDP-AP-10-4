@@ -15,3 +15,4 @@ class StatusChoice(models.TextChoices):
     SENT_TO_REWORK = 'SENT TO REWORK', 'Отправлен на доработку'
     CONFIRMED = 'CONFIRMED', 'Подтвержден'
     REFUSED = 'REFUSED', 'Отказ'
+    FINISHED = 'FINISHED', 'Завершён'

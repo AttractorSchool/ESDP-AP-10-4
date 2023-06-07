@@ -2,9 +2,11 @@
 {% load django_bootstrap5%}
 
 {% block menu %}
+{% if user.is_guide %}
     <li>
         <a class="nav-link" href="{% url "guide_profile" user.guide_profile.pk %}">Личный кабинет</a>
     </li>
+{% endif %}
 {% endblock %}
 
 {% block content %}

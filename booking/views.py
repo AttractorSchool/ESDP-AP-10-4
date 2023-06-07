@@ -1,8 +1,8 @@
 from booking.models import Booking
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from tours.models import Tour
-from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class BookToursView(UserPassesTestMixin, View):
