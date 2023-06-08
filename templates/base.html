@@ -28,9 +28,9 @@
                                 <a class="nav-link" href="{% url "guide_profile" user.guide_profile.pk %}"> {{ user.email }}</a>
                             </li>
                         {% else %}
-{#                              <li>#}
-{#                                <a class="nav-link" href="{% url "guide_profile" user.pk %}">ЛК</a>#}
-{#                            </li>#}
+                             <li>
+                             <a class="nav-link" href="{% url "tourist-profile" user.pk %}">ЛК</a>
+                            </li>
                         {% endif %}
                     {% endblock %}
                 {% else %}
