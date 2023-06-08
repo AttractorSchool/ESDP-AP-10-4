@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.views.generic import DetailView
-
 from tours.models import Tour
+from django.views.generic import DetailView
 
 
 class TouristDetailView(UserPassesTestMixin, DetailView):
@@ -19,4 +18,3 @@ class TouristDetailView(UserPassesTestMixin, DetailView):
 
     def test_func(self):
         return True
-
