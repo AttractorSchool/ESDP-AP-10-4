@@ -4,19 +4,28 @@
     </button>
 
     <ul class="dropdown-menu cascadia-font">
-        <li>
-            {% if user.is_guide %}
+        {% if user.is_guide %}
+            <li>
                 <a class="dropdown-item" href="{% url "guide_profile" user.guide_profile.pk %}">
                     <span>Личный кабинет</span>
                 </a>
-            {% else %}
+            </li>
+
+            <!-- Создать Тур -->
+            <li>
+                <a class="dropdown-item" href="{% url 'tour_create' %}">
+                    Создать Тур
+                </a>
+            </li>
+        {% else %}
+            <li>
                 <a class='dropdown-item' href="#">
                     <span>Личный кабинет</span>
                 </a>
-            {% endif %}
-        </li>
+            </li>
+        {% endif %}
 
-        <li><a class="dropdown-item" href="{% url 'tour_create' %}">Создать Тур</a></li>
+        <!-- Общие поля -->
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Выйти</a></li>
     </ul>
