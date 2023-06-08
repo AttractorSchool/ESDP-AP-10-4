@@ -1,13 +1,24 @@
+from datetime import datetime, timedelta
+
 from booking.models import Booking
+from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
+from django.views.generic.detail import SingleObjectMixin
 from tours.models import Tour
 
 
-class BookToursView(UserPassesTestMixin, View):
+ALLOW_TO_BOOK_OR_CANCEL = [
+    StatusChoice.CONFIRMED,
+]
+
+
+class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
+    model = Tour
+
     def post(self, request, pk):
-        tour = get_object_or_404(Tour, pk=pk)
+        tour = get_object_or_404(self.model, pk=pk)
 
         if request.user in tour.tourists.all():
             Booking.objects.filter(user=request.user, tour=tour).delete()
@@ -25,6 +36,7 @@ class BookToursView(UserPassesTestMixin, View):
 
     def test_func(self):
         if not self.request.user.is_guide and self.request.user.is_authenticated:
-            return True
+            if self.get_object().moderation_status in ALLOW_TO_BOOK_OR_CANCEL:
+                return True
         else:
             return False

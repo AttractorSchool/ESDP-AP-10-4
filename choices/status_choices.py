@@ -8,6 +8,8 @@ class StatusChoice(models.TextChoices):
     Отправлен на доработку
     Отказ
     Подтвержден
+    Завершён
+    Начался
     """
 
     NOT_VERIFIED = 'NOT VERIFIED', 'Непроверен'
@@ -16,3 +18,4 @@ class StatusChoice(models.TextChoices):
     CONFIRMED = 'CONFIRMED', 'Подтвержден'
     REFUSED = 'REFUSED', 'Отказ'
     FINISHED = 'FINISHED', 'Завершён'
+    STARTED = 'STARTED', 'Начался'

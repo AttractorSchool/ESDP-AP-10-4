@@ -11,6 +11,7 @@ from tours.models.tour import Tour
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
     StatusChoice.FINISHED,
+    StatusChoice.STARTED,
 ]
 
 ALLOWED_TO_EDIT = [
@@ -26,9 +27,9 @@ class TourListView(ListView):
 
     def get(self, request, *args, **kwargs):
         tours = Tour.objects.all()
-        today = datetime.now() + timedelta(hours=6)
+        today = (datetime.now() + timedelta(hours=6)).strftime('%Y-%m-%d %H:%M')
         for tour in tours:
-            if today.strftime('%Y-%m-%d %H:%M') >= tour.end_date.strftime('%Y-%m-%d %H:%M'):
+            if today >= tour.end_date.strftime('%Y-%m-%d %H:%M'):
                 tour.moderation_status = StatusChoice.FINISHED
             tour.save()
         return super().get(request, *args, **kwargs)
@@ -68,9 +69,16 @@ class TourDetailView(UserPassesTestMixin, DetailView):
 
     def get(self, request, pk, *args, **kwargs):
         tour = get_object_or_404(self.model, pk=pk)
-        today = datetime.now() + timedelta(hours=6)
-        if today.strftime('%Y-%m-%d %H:%M') >= tour.end_date.strftime('%Y-%m-%d %H:%M'):
+        today = (datetime.now() + timedelta(hours=6)).strftime('%Y-%m-%d %H:%M')
+        start_date = tour.start_date.strftime('%Y-%m-%d %H:%M')
+        end_date = tour.end_date.strftime('%Y-%m-%d %H:%M')
+
+        if today >= start_date:
+            tour.moderation_status = StatusChoice.STARTED
+
+        if today >= end_date:
             tour.moderation_status = StatusChoice.FINISHED
+
         tour.save()
         return super().get(request, *args, **kwargs)
 
