@@ -5,7 +5,7 @@
 {% block content %}
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card mb-5">
                 <div class="card-body">
                     <h5 class="card-title">{{ tour.title }}</h5>
                     <p class="card-text">Описание тура: {{ tour.description }}</p>
@@ -52,10 +52,6 @@
                             {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-danger' button_text='Отменить бронь' %}
                         </form>
                     </div>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded bg-success">
-                        <i class="bi bi-check fs-5"></i>
-                        <span class="visually-hidden">unread messages</span>
-                </span>
                 {% endif %}
             </div>
         </div>

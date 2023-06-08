@@ -1,9 +1,9 @@
-<div class="card rounded-4 monserat-regular-font">
+<div class="card rounded-4 monserat-regular-font shadow-lg">
     <img class="card-img-top rounded-4" src="https://media.timeout.com/images/105658195/image.jpg" alt="img">
     <div class="card-img-overlay text-white p-4 d-flex flex-column justify-content-end">
         <div class="info pb-4">
             <h4 class="card-title">{{ tour.title }}</h4>
-            <p class="card-text">{{ tour.description | truncatewords:10 }}</p>
+            <p class="card-text">{{ tour.description | truncatewords:10 }}...</p>
         </div>
 
         <div class="bottom d-flex justify-content-between align-items-center">
