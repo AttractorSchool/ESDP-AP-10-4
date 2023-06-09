@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from booking.models import Booking
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin

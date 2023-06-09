@@ -58,4 +58,3 @@ class TourCreateForm(forms.ModelForm):
 
         if max_number_of_tourists < min_number_of_tourists:
             raise forms.ValidationError('Минимальное количество людей больше максимального!')
-
