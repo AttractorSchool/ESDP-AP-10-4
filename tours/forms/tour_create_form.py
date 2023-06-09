@@ -3,6 +3,7 @@ from tours.models.tour import Tour
 
 
 class TourCreateForm(forms.ModelForm):
+
     class Meta:
         model = Tour
         fields = (
@@ -26,12 +27,22 @@ class TourCreateForm(forms.ModelForm):
             'min_number_of_tourists': 'Минимальное количество туристов',
         }
         widgets = {
-            'start_date': forms.DateInput(
-                format=('%Y-%m-%d'),
-                attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
-            'end_date': forms.DateInput(
-                format=('%Y-%m-%d'),
-                attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
+            'start_date': forms.DateTimeInput(
+                format=('%Y-%m-%d %H:%M'),
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Select a date',
+                    'type': 'datetime-local',
+                },
+            ),
+            'end_date': forms.DateTimeInput(
+                format=('%Y-%m-%d %H:%M'),
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Select a date',
+                    'type': 'datetime-local',
+                },
+            ),
         }
 
     def clean(self):
@@ -46,6 +57,4 @@ class TourCreateForm(forms.ModelForm):
         min_number_of_tourists = cleaned_data.get('min_number_of_tourists')
 
         if max_number_of_tourists < min_number_of_tourists:
-            raise forms.ValidationError(
-                'Минимальное количество людей не может быть больше максимального!',
-            )
+            raise forms.ValidationError('Минимальное количество людей больше максимального!')

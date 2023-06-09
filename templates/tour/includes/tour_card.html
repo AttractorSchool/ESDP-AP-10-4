@@ -3,6 +3,11 @@
         <h5 class="card-title">{{ tour.title }}</h5>
         <p class="card-text">{{ tour.description }}</p>
         <p class="card-text">{{ tour.price }} тенге</p>
+        {% if tour.moderation_status == 'FINISHED' %}
+            <p style="color:red; font-weight: bold;" class="card-text">Тур {{ tour.get_moderation_status_display }}</p>
+        {% elif tour.moderation_status == 'STARTED' %}
+            <p style="color:green; font-weight: bold;" class="card-text">Тур {{ tour.get_moderation_status_display }}</p>
+        {% endif %}
         <a href="{% url 'tour_detail' tour.pk %}" class="btn btn-primary">Подробнее</a>
     </div>
 </div>
