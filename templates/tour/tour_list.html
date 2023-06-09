@@ -4,22 +4,19 @@
 
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
 {% endblock %}
 
 
-
-
 {% block content %}
-    <h1 style="text-align: center">Туры по Казахстану</h1>
-    <div class="container text-center">
-        <div class="row g-4">
+    <div class="container mb-5">
+        <h1 class="text-center mb-5 text-dark monserat-bold-font">Туры по Казахстану</h1>
+        <div class="row g-5">
             {% for tour in tours %}
-                <div class="col-md-4">
+                <div class="col-md-6 col-lg-4">
                     {% include 'tour/includes/tour_card.html' %}
                 </div>
             {% endfor %}
         </div>
     </div>
-
 {% endblock %}

@@ -1,0 +1,47 @@
+<div class="card border border-1 rounded-4 monserat-regular-font shadow-lg">
+    <div class="card-body p-4 d-flex flex-column justify-content-end ">
+        <div class="info pb-4 position-relative">
+            <h4 class="card-title">{{ tour.title }}</h4>
+            <p class="card-text">{{ tour.description | truncatewords:256 }}...</p>
+
+            <p class="card-text">
+                Гид:
+                <a href={% url 'guide_profile' tour.author.guide_profile.pk %}>
+                    {{ tour.author.get_full_name }}
+                </a>
+            </p>
+            <h4 class="user-select-none">
+                <span class="badge rounded-3 text-black border border-2 border-dark position-absolute top-0 end-0">
+                    {{ tour.language }}
+                </span>
+            </h4>
+            <p class="card-text">Начало тура: {{ tour.start_date }}</p>
+            <p class="card-text">Завершение тура: {{ tour.end_date }}</p>
+            <p class="card-text">
+                Количество туристов: от {{ tour.min_number_of_tourists }} до {{ tour.max_number_of_tourists }}
+            </p>
+        </div>
+
+        <div class="bottom d-flex justify-content-sm-center justify-content-md-between  align-items-center flex-wrap">
+            <h2 class="user-select-none">
+                    {{ tour.price }}тг × 10% =
+                <span class="badge roudned-3 text-bg-dark">
+                    {{ tour.get_deposit }}
+                </span>
+            </h2>
+            <div class="buttons">
+                <a href="{% url 'tour_detail' tour.pk %}"
+                   class="cascadia-font text-black btn px-3 rounded-3 border border-2 border-dark btn-outline-info"
+                >
+                    Подробнее
+                </a>
+
+                <a href="{% url 'tour_update' tour.pk %}"
+                   class="btn btn-outline-warning cascadia-font rounded-3 border border-2 border-dark text-black"
+                   >
+                    Изменить
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

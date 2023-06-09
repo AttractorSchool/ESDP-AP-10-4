@@ -1,0 +1,61 @@
+{% load static %}
+
+{% block css %}
+    <style>
+        .nav-item .active {
+            border: 2px dashed black;
+        }
+    </style>
+{% endblock %}
+
+{# ТАБЫ #}
+<ul class="nav nav-pills gap-2 mb-4" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-success text-white active tab-pofile-link rounded-3" id="pills-home-tab" data-bs-toggle="pill"
+                data-bs-target="#pills-home"
+                type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+            Confirmed
+        </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-warning text-white tab-pofile-link rounded-3" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile"
+                type="button"
+                role="tab" aria-controls="profile" aria-selected="false">
+            Sent to Verification
+        </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-danger text-white tab-pofile-link rounded-3" id="pills-contact-tab" data-bs-toggle="pill"
+                data-bs-target="#pills-contact"
+                type="button" role="tab" aria-controls="pills-contact" aria-selected="false">
+            Refused
+        </button>
+    </li>
+</ul>
+
+{% if user.guide_profile == guide_profile %}
+    <div class="row my-4">
+        <div class="col d-flex justify-content-end">
+            {% if is_verified %}
+                <a class="btn btn-success rounded-3 shadow"
+                   role="button"
+                   href="{% url 'tour_create' %}">Создать</a>
+            {% else %}
+                <div class="alert alert-warning mt-5" role="alert">
+                    У вас нет возможности создать Тур
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+
+<div class="tab-content" id="myTabContent">
+    {% include 'account/includes/tabs/confirmed.html' %}
+    {% include 'account/includes/tabs/sent_to_verification.html' %}
+    {% include 'account/includes/tabs/refused.html' %}
+</div>
+
+<script src="{% static 'my_scripts/script_1.js' %}"></script>

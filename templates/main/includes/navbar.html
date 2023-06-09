@@ -1,0 +1,26 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5 px-3 border border-dark border-2 shadow-lg rounded-4 my-3">
+    <div class="container cascadia-font">
+        <a class="navbar-brand" href="{% url 'tour_list' %}">
+            <span class="fw-bold">JOURNEY</span>
+        </a>
+
+        <div class="" id="navbarNav">
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    {% block menu %}
+                        {% include 'main/includes/dropdown.html' %}
+                    {% endblock %}
+                {% else %}
+                    <li>
+                        <a class="nav-link" href="{% url "login" %}">Войти</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url "register" %}">Зарегестрироваться</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
