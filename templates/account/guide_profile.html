@@ -7,53 +7,21 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/card.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="profile-info__item">
-        {% if user.guide_profile == guide_profile %}
-            <h2 class="profile-info__title">Ваш профиль {{ guide_profile.user.get_full_name }}</h2>
-            <h2 class="profile-info__title">Статус: </h2>
-            <p class="profile-info__description">{{ guide_profile.verification_status }}</p>
-        {% else %}
-            <h2 class="profile-info__title">Гид {{ guide_profile.user.get_full_name }} </h2>
-        {% endif %}
+
+    {% include "account/includes/sections/profile_info.html" %}
+
+    <div class="row">
+        <div class="col-12 col-lg-3">
+            {% include "account/includes/sections/contacts.html" %}
+        </div>
+
+        <div class="col-12 col-lg-9">
+            {% include "account/includes/sections/tours.html" %}
+        </div>
     </div>
-
-    {# ТАБЫ #}
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item " role="presentation">
-            <button class="nav-link active tab-pofile-link" id="pills-home-tab" data-bs-toggle="pill"
-                    data-bs-target="#pills-home"
-                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">
-                Туры
-            </button>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <button class="nav-link tab-pofile-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile"
-                    type="button"
-                    role="tab" aria-controls="profile" aria-selected="false">
-                Профиль
-            </button>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <button class="nav-link tab-pofile-link" id="pills-contact-tab" data-bs-toggle="pill"
-                    data-bs-target="#pills-contact"
-                    type="button" role="tab" aria-controls="pills-contact" aria-selected="false">
-                Контакты
-            </button>
-        </li>
-    </ul>
-
-
-    <div class="tab-content" id="myTabContent">
-        {% include 'account/includes/tabs/tours_tab.html' %}
-        {% include 'account/includes/tabs/profile_tab.html' %}
-        {% include 'account/includes/tabs/contacts_tab.html' %}
-    </div>
-
-    <script src="{% static 'my_scripts/script_1.js' %}"></script>
 {% endblock %}
 
