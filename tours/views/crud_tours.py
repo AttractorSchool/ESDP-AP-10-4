@@ -4,6 +4,7 @@ from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from tours.forms.tour_create_form import TourCreateForm
 from tours.models.tour import Tour
@@ -27,10 +28,14 @@ class TourListView(ListView):
 
     def get(self, request, *args, **kwargs):
         tours = Tour.objects.all()
-        today = (datetime.now() + timedelta(hours=6)).strftime('%Y-%m-%d %H:%M')
         for tour in tours:
-            if today >= tour.end_date.strftime('%Y-%m-%d %H:%M'):
+
+            if timezone.now() >= tour.start_date:
+                tour.moderation_status = StatusChoice.STARTED
+
+            if timezone.now() >= tour.end_date:
                 tour.moderation_status = StatusChoice.FINISHED
+
             tour.save()
         return super().get(request, *args, **kwargs)
 
@@ -69,14 +74,11 @@ class TourDetailView(UserPassesTestMixin, DetailView):
 
     def get(self, request, pk, *args, **kwargs):
         tour = get_object_or_404(self.model, pk=pk)
-        today = (datetime.now() + timedelta(hours=6)).strftime('%Y-%m-%d %H:%M')
-        start_date = tour.start_date.strftime('%Y-%m-%d %H:%M')
-        end_date = tour.end_date.strftime('%Y-%m-%d %H:%M')
 
-        if today >= start_date:
+        if timezone.now() >= tour.start_date:
             tour.moderation_status = StatusChoice.STARTED
 
-        if today >= end_date:
+        if timezone.now() >= tour.end_date:
             tour.moderation_status = StatusChoice.FINISHED
 
         tour.save()
