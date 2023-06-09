@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404
