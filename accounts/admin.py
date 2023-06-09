@@ -1,15 +1,16 @@
+from choices import StatusChoice
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 
-from choices import StatusChoice
-from .models import User, GuideProfile
-from .utils import create_user, create_profile
+from .models import GuideProfile, User
+from .utils import create_profile, create_user
+
 
 ALLOWED_TO_EDIT = [
     StatusChoice.NOT_VERIFIED,
     StatusChoice.SENT_TO_REWORK,
     StatusChoice.SENT_TO_VERIFICATION,
-    StatusChoice.REFUSED
+    StatusChoice.REFUSED,
 ]
 
 

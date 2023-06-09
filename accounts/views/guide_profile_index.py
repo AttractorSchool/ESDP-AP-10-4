@@ -17,10 +17,10 @@ class GuideProfileView(UserPassesTestMixin, DetailView):
         verification_status = self.object.verification_status
         context['is_verified'] = verification_status == StatusChoice.CONFIRMED
         context['guide_tours'] = self.object.user.tour.all()
-        context['guide_confirmed_tours'] = self.object.user.tour.filter(moderation_status=StatusChoice.CONFIRMED)
+        context['guide_confirmed_tours'] = self.object.user.tour.filter(
+            moderation_status=StatusChoice.CONFIRMED,
+        )
         return context
-
-
 
     def test_func(self):
         obj = self.get_object()

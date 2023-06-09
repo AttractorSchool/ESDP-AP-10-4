@@ -18,10 +18,10 @@ def validator_date(start_date, end_date):
     if start_date > end_date:
         raise ValidationError('Дата начала тура должна быть раньше даты завершения.')
 
-
 def possibility_of_creating_a_tour(start_date):
     if start_date.day - datetime.now().day < 3:
         raise ValidationError('Нельзя создавать тур менее чем за 3 дня')
+
 
 
 class Tour(models.Model):

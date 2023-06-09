@@ -29,7 +29,6 @@ class LoginView(FormView):
         return self.form_invalid(form)
 
     def form_invalid(self, form):
-        print(form)
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 

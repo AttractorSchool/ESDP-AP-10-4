@@ -1,12 +1,21 @@
 from django import forms
-from django.core.exceptions import ValidationError
-
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 
 class UserRegisterForm(forms.ModelForm):
-    password = forms.CharField(required=True, widget=forms.PasswordInput, label='Create password')
-    password_confirm = forms.CharField(required=True, widget=forms.PasswordInput, label='Password confirm')
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput,
+        label='Create password',
+    )
+
+    password_confirm = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput,
+        label='Password confirm',
+    )
+
     is_guide = forms.BooleanField(required=False)
 
     class Meta:

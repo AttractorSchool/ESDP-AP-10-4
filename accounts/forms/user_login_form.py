@@ -15,4 +15,3 @@ class UserLoginForm(forms.Form):
         user = authenticate(email=email, password=password)
         if not user:
             raise ValidationError('')
-
