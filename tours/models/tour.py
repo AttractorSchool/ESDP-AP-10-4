@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from choices import StatusChoice
 from django.contrib.auth import get_user_model
@@ -8,13 +8,20 @@ from django.db import models
 
 
 def date_validation(value):
-    if value < datetime.date.today():
+    value_str = value.strftime('%Y-%m-%d %H:%M')
+    datetime_now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
+    if value_str < datetime_now_str:
         raise ValidationError('Нельзя выбрать дату из прошлого!')
 
 
 def validator_date(start_date, end_date):
     if start_date > end_date:
         raise ValidationError('Дата начала тура должна быть раньше даты завершения.')
+
+
+def possibility_of_creating_a_tour(start_date):
+    if start_date.day - datetime.now().day < 3:
+        raise ValidationError('Нельзя создавать тур менее чем за 3 дня')
 
 
 class Tour(models.Model):
@@ -38,13 +45,13 @@ class Tour(models.Model):
         blank=False,
         verbose_name='Описание',
     )
-    start_date = models.DateField(
+    start_date = models.DateTimeField(
         auto_now_add=False,
         auto_now=False,
         verbose_name='Дата старта',
         validators=[date_validation],
     )
-    end_date = models.DateField(
+    end_date = models.DateTimeField(
         auto_now_add=False,
         auto_now=False,
         verbose_name='Дата завершения',
@@ -95,6 +102,7 @@ class Tour(models.Model):
 
     def clean(self):
         validator_date(self.start_date, self.end_date)
+        possibility_of_creating_a_tour(self.start_date)
 
     def get_deposit(self):
         return round(self.price / self.max_number_of_tourists)

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load django_bootstrap5%}
 
-
 {% block content %}
     <form action="{% url 'tour_create' %}" method="POST">
     {% csrf_token %}
