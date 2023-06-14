@@ -4,8 +4,10 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic.edit import FormMixin
 from tours.forms.tour_create_form import TourCreateForm
 from tours.models.tour import Tour
+from tours.forms.tour_rating_create_form import TourRatingCreateForm
 
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
@@ -65,10 +67,11 @@ class TourCreateView(CreateView):
         return False
 
 
-class TourDetailView(UserPassesTestMixin, DetailView):
+class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
     template_name = 'tour/tour_detail.html'
     model = Tour
     context_object_name = 'tour'
+    form_class = TourRatingCreateForm
 
     def get(self, request, pk, *args, **kwargs):
         tour = get_object_or_404(self.model, pk=pk)
