@@ -19,13 +19,13 @@ class TourRating(models.Model):
         blank=False,
         null=False,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        verbose_name='Соответствие тура описанию'
+        verbose_name='Соответствие тура описанию',
     )
     professionalism = models.SmallIntegerField(
         blank=False,
         null=False,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        verbose_name='Профессионализм гида'
+        verbose_name='Профессионализм гида',
     )
     text_review = models.TextField(
         max_length=3000,
@@ -35,9 +35,6 @@ class TourRating(models.Model):
     )
 
     class Meta:
-        constraints = [
-            UniqueConstraint(fields=['tourist', 'tour'], name='rating_once'),
-        ]
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинги'
 
