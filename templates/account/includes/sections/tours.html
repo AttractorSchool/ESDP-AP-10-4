@@ -5,7 +5,7 @@
 {% endblock %}
 
 {# ТАБЫ #}
-<ul class="nav gap-2" id="myTab" role="tablist">
+<ul class="nav gap-2 mb-4" id="myTab" role="tablist">
     {% if user.is_guide %}
         {% include 'account/includes/controllers/guide.html' %}
     {% else %}
@@ -18,5 +18,3 @@
     {% include 'account/includes/tabs/guide/sent_to_verification.html' %}
     {% include 'account/includes/tabs/guide/refused.html' %}
 </div>
-
-<script src="{% static 'my_scripts/script_1.js' %}"></script>
