@@ -20,6 +20,12 @@
                     <p class="card-text">Цена: {{ tour.price }} тенге</p>
                     <p class="card-text"><b>Депозит: {{ tour.get_deposit }} тенге</b></p>
                     <p class="card-text"><b>Кол-во людей, забронировавших тур: {{ tour.tourists.count }}</b></p>
+
+
+                    <p class="card-text" style="color:orange;"><b>Оценка: {{ tour.average_rating }}</b></p>
+
+
+
                     {% if user in tour.tourists.all %}
                         <p class="card-text fw-bold text-success">
                             Вы забронировали тур.
@@ -57,6 +63,24 @@
                         </form>
                     </div>
                 {% endif %}
+
+                {{ user.rating_by_tourist.tourist }}
+
+                {% if user in tour.tourists.all and tour.moderation_status == 'FINISHED' %}
+                    {% if user not in user.rating_by_tourist.all %}
+                        <form action="{% url 'tour_rating' tour.pk %}" method="POST">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% bootstrap_button button_type="submit" content="Оценить тур"%}
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+                {% for rating in tour.tour_rating.all %}
+                    {{ rating.tourist }} Оценки: {{ rating.correspondence }}, {{ rating.professionalism }}
+                    <p>Текст комментария: {{ rating.text_review }}</p>
+                {% endfor %}
+
             </div>
         </div>
     </div>

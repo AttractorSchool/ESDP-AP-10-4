@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Tour
+from .models import Tour, TourRating
 
 
 class TourAdmin(admin.ModelAdmin):
@@ -15,4 +15,16 @@ class TourAdmin(admin.ModelAdmin):
         verbose_name_plural = 'Туры'
 
 
+class TourRatingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'tourist', 'tour', 'correspondence', 'professionalism')
+    list_display_links = ['id']
+    list_filter = ('tour', 'tourist')
+    search_fields = ('tour', 'tourist')
+
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
+
+
 admin.site.register(Tour, TourAdmin)
+admin.site.register(TourRating, TourRatingAdmin)

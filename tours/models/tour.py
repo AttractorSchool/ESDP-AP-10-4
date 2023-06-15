@@ -119,5 +119,17 @@ class Tour(models.Model):
         grand_total = (self.price / tourists_count) - self.get_deposit()
         return round(grand_total)
 
+    @property
+    def average_rating(self):
+        lst = []
+        for rating in self.tour_rating.all():
+            lst.append(rating.professionalism)
+            lst.append(rating.correspondence)
+        try:
+            avg = sum(lst) / len(lst)
+        except ZeroDivisionError:
+            return 0
+        return round(avg, 1)
+
     def __str__(self):
         return f'Tour {self.title} by {self.author}'

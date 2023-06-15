@@ -6,6 +6,7 @@ from tours.views.crud_tours import (
     TourListView,
     TourUpdateView,
 )
+from tours.views.rating import TourRatingCreateView
 
 urlpatterns = [
     path('', TourListView.as_view(), name='tour_list'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('<int:pk>/', TourDetailView.as_view(), name='tour_detail'),
     path('<int:pk>/update/', TourUpdateView.as_view(), name='tour_update'),
     path('<int:pk>/delete/', TourDeleteView.as_view(), name='tour_delete'),
+    path('<int:pk>/rating/', TourRatingCreateView.as_view(), name='tour_rating'),
 ]
