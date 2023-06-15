@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-12">
-        <div class="profile shadow-lg p-4 mb-5 rounded-4 border border-1">
+        <div class="profile p-4 rounded-4 border border-1">
             <div class="info d-flex flex-wrap position-relative">
                 <div class="avatar-profile me-5">
                     <img src="https://cdn.landesa.org/wp-content/uploads/default-user-image.png"
@@ -9,14 +9,16 @@
                 </div>
 
                 <div class="detail flex-grow-1">
-                    <div class="fullname">{{ guide_profile.user.get_full_name }}</div>
+                    <div class="fullname">{{ full_name }}</div>
                 </div>
 
-                <h4>
-                    <span class="badge rounded-3 text-bg-success position-absolute top-0 end-0">
-                        {{ guide_profile.verification_status }}
-                    </span>
-                </h4>
+                {% if user.is_guide %}
+                    <h4>
+                        <span class="badge rounded-5 text-bg-success position-absolute top-0 end-0">
+                            {{ status }}
+                        </span>
+                    </h4>
+                {% endif %}
             </div>
         </div>
     </div>

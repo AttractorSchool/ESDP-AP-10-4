@@ -1,0 +1,10 @@
+.nav-item .pill {
+    background-color: white;
+    color: black;
+    padding: 5px 10px;
+}
+
+.nav-item .pill.active {
+    background-color: black;
+    color: white;
+}
