@@ -14,7 +14,13 @@
 </ul>
 
 <div class="tab-content" id="myTabContent">
-    {% include 'account/includes/tabs/guide/confirmed.html' %}
-    {% include 'account/includes/tabs/guide/sent_to_verification.html' %}
-    {% include 'account/includes/tabs/guide/refused.html' %}
+    {% if user.is_guide %}
+        {% include 'account/includes/tabs/guide/confirmed.html' %}
+        {% include 'account/includes/tabs/guide/sent_to_verification.html' %}
+        {% include 'account/includes/tabs/guide/refused.html' %}
+        {% include 'account/includes/tabs/guide/finished.html' %}
+    {% else %}
+        {% include 'account/includes/tabs/tourist/booking.html' %}
+        {% include 'account/includes/tabs/tourist/finished.html' %}
+    {% endif %}
 </div>

@@ -20,6 +20,11 @@
             <p class="card-text">
                 Количество туристов: от {{ tour.min_number_of_tourists }} до {{ tour.max_number_of_tourists }}
             </p>
+            <h4 class="card-text">
+                 <span class="badge rounded-3 text-black border border-2 border-dark">
+                    {{ tour.moderation_status }}
+                </span>
+            </h4>
         </div>
 
         <div class="bottom d-flex justify-content-sm-center justify-content-md-between  align-items-center flex-wrap">
