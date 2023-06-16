@@ -17,7 +17,9 @@
 
     <div class="row my-4 gy-3">
         <div class="col-12 col-lg-3">
-            {% include "account/includes/sections/contacts.html" %}
+            {% with email=user.email %}
+                {% include "account/includes/sections/contacts.html" %}
+            {% endwith %}
         </div>
 
         <div class="col-12 col-lg-9">
