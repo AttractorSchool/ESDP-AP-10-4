@@ -10,7 +10,7 @@
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
                     {% block menu %}
-                        {% include 'main/includes/dropdown.html' %}
+                        {% include 'main/includes/dropdown/dropdown.html' %}
                     {% endblock %}
                 {% else %}
                     <li>

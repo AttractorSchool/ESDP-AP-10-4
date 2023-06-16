@@ -11,6 +11,13 @@
                 </a>
             </li>
 
+            <!-- Обновить профиль -->
+            <li>
+                <a class="dropdown-item" href="{% url "update_guide" user.pk %}">
+                    Обновить профиль
+                </a>
+            </li>
+
             <!-- Создать Тур -->
             <li>
                 <a class="dropdown-item" href="{% url 'tour_create' %}">
@@ -19,10 +26,17 @@
             </li>
         {% else %}
             <li>
-                <a class='dropdown-item' href="#">
+                <a class='dropdown-item' href="{% url 'tourist_profile' user.pk %}">
                     <span>Личный кабинет</span>
                 </a>
             </li>
+
+            <li>
+                <a class="dropdown-item" href="#">
+                    Обновить профиль
+                </a>
+            </li>
+
         {% endif %}
 
         <!-- Общие поля -->

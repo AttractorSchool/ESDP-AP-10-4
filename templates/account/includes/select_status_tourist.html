@@ -1,0 +1,12 @@
+{#   Tours List   #}
+<div class="row g-5 mb-5">
+    {% for booking in user.tours.all %}
+        {% if booking.tour.moderation_status == status %}
+            <div class="col-12">
+                {% with tour=booking.tour %}
+                    {% include "tour/includes/tour_card.html" %}
+                {% endwith %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

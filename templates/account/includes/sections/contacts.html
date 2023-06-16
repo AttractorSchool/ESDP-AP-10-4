@@ -1,15 +1,28 @@
-<div class="card border border-1 shadow-lg rounded-4">
+<div class="card border border-1 rounded-4">
     <div class="card-body">
         <div class="card-text">
-            <div class="email">Email: <u class="ms-2">{{ guide_profile.user.email }}</u></div>
+            <div class="email">Email: <u class="ms-2">{{ email }}</u></div>
             <div class="number">Phone: <u class="ms-2">+7 705 513 9002</u></div>
         </div>
-
-        {% if user == guide_profile.user %}
-            <div class="profile-info__item">
-                <a class="btn btn-warning rounded-3 mt-2" href="{% url "update_guide" guide_profile.user.pk %}"
-                   role="button"> обновить профиль </a>
-            </div>
-        {% endif %}
     </div>
 </div>
+
+{% if user.guide_profile == guide_profile %}
+    <div class="row my-4">
+        <div class="col">
+            {% if user.guide_profile.verification_status == 'CONFIRMED' %}
+                <div class="col-12">
+                    <a class="btn btn-success rounded-4 w-100"
+                       role="button"
+                       href="{% url 'tour_create' %}">Создать</a>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-warning text-center rounded-4">
+                        У вас нет возможности создать Тур
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

@@ -11,12 +11,15 @@
 {% endblock %}
 
 {% block content %}
+    {% with full_name=guide_profile.user.get_full_name status=guide_profile.verification_status %}
+        {% include "account/includes/sections/profile_info.html" %}
+    {% endwith %}
 
-    {% include "account/includes/sections/profile_info.html" %}
-
-    <div class="row">
+    <div class="row my-4 gy-3">
         <div class="col-12 col-lg-3">
-            {% include "account/includes/sections/contacts.html" %}
+            {% with email=guide_profile.user.email %}
+                {% include "account/includes/sections/contacts.html" %}
+            {% endwith %}
         </div>
 
         <div class="col-12 col-lg-9">
