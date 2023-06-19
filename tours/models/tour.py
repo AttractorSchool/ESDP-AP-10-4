@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from choices import StatusChoice
 from django.contrib.auth import get_user_model
@@ -20,7 +20,9 @@ def validator_date(start_date, end_date):
 
 
 def possibility_of_creating_a_tour(start_date):
-    if start_date.day - datetime.now().day < 3:
+    interval = start_date - datetime.now()
+    three_days = timedelta(days=3)
+    if interval < three_days:
         raise ValidationError('Нельзя создавать тур менее чем за 3 дня')
 
 
