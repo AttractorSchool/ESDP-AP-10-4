@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+
+
+{% block content %}
+    <div class="card col col-6 bg-light">
+        <div class="card-body">
+
+            <form id="recarringForm" autocomplete="off">
+                <label for="cardNumber" class=" text-muted mb-2 col-label text-grey">Номер карты:</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-credit-card" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+                            <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+                        </svg>
+                    </span>
+                    <input type="text" class=" form-control" id="cardNumber" data-cp="cardNumber"
+                           placeholder="0000 0000 0000 0000">
+                </div>
+
+                <div class="mb-3">
+                    <label for="expDateMonth" class="form-label">Expiration Month</label>
+                    <input id="expDateMonth" type="text" data-cp="expDateMonth">
+                </div>
+
+                <div class="mb-3">
+                    <label for="expDateYear" class="form-label">Expiration Year</label>
+                    <input id="expDateYear" type="text" data-cp="expDateYear">
+                </div>
+
+                <div class="mb-3">
+                    <label for="CVV" class="form-label">CVV</label>
+                    <input id="CVV" type="text" data-cp="cvv">
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Holder Name</label>
+                    <input id="name" type="text" data-cp="name">
+                </div>
+
+                {% bootstrap_button button_type="submit" id="id_submit" content="Забронировать" %}
+            </form>
+        </div>
+    </div>
+
+
+    <script src="https://checkout.cloudpayments.ru/checkout.js"></script>
+
+
+    <script>
+        let submitButton = $('#id_submit')
+        let checkout = new cp.Checkout({
+            publicId: 'pk_aad02fa59dec0bacabf00955821fd',
+            container: document.getElementById("recarringForm")
+        });
+
+
+        $(submitButton).click(
+            function createCryptogram(event) {
+                event.preventDefault()
+                checkout.createPaymentCryptogram()
+                    .then((cryptogram) => {
+                        console.log("here is cryptogram");
+                        console.log(cryptogram); // криптограмма
+                    }).catch((errors) => {
+                    console.log('i am here')
+                    console.log(errors)
+                });
+            }
+
+    </script>
+
+
+{% endblock %}
+
+

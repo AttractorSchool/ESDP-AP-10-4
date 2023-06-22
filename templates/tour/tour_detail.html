@@ -52,7 +52,8 @@
                 {# Booking button #}
                 {% if user not in tour.tourists.all and user.is_tourist and tour.moderation_status == 'CONFIRMED' %}
                     <div class="card-footer">
-                        <form action="{% url 'book_tours' tour.pk %}" method="POST">
+                        <form action="{% url 'recarring' tour.pk %}" method="GET">
+                            {% csrf_token %}
                             {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Забронировать' %}
                         </form>
                     </div>

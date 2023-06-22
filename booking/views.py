@@ -1,8 +1,10 @@
+from django.views import View
+from django.views.generic import TemplateView
+
 from booking.models import Booking
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.views import View
 from django.views.generic.detail import SingleObjectMixin
 from tours.models import Tour
 
@@ -38,3 +40,8 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
                 return True
         else:
             return False
+
+
+class RecarringView(TemplateView):
+    template_name = "tour/booking/recarring.html"
+
