@@ -10,11 +10,11 @@ services:
       SECRET_KEY: 3+($${l})*g1v3*7c91^vs+!b^af89cf8)73n6-c2h-f-upgmtf@zh(
       DATABASE_URL: postgres://postgres:postgres@postgres/postgres
     tty: true
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:8001
     volumes:
       - .:/app
     ports:
-      - '8000:8000'
+      - '8001:8001'
     depends_on:
       postgres:
         condition: service_healthy

@@ -7,17 +7,19 @@
     <div class="card col col-6 bg-light">
         <div class="card-body">
 
-            <form id="recarringForm" autocomplete="off">
+            <form id="recarringForm" autocomplete="on">
+                {% csrf_token %}
                 <label for="cardNumber" class=" text-muted mb-2 col-label text-grey">Номер карты:</label>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-credit-card" viewBox="0 0 16 16">
-                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-                            <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-                        </svg>
-                    </span>
-                    <input type="text" class=" form-control" id="cardNumber" data-cp="cardNumber"
+                        <span class="input-group-text" id="basic-addon1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-credit-card" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+                                <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+                            </svg>
+                        </span>
+                    <input type="text" autocomplete="cc-number" class="form-control" id="cardNumber"
+                           data-cp="cardNumber"
                            placeholder="0000 0000 0000 0000">
                 </div>
 
@@ -41,9 +43,15 @@
                     <label for="name" class="form-label">Holder Name</label>
                     <input id="name" type="text" data-cp="name">
                 </div>
-
                 {% bootstrap_button button_type="submit" id="id_submit" content="Забронировать" %}
             </form>
+
+            <form id="stage_form" name="downloadForm" action="" method="POST">
+                <input id="pareq" type="hidden" name="PaReq" value="">
+                <input id="md" type="hidden" name="MD" value="">
+                <input id="termurl" type="hidden" name="TermUrl" value="">
+            </form>
+
         </div>
     </div>
 
@@ -52,29 +60,111 @@
 
 
     <script>
+        function redirectNext(successUrl) {
+            window.location.replace(successUrl)
+        }
+
+
+        let user_ip = "3.72.70.155"
         let submitButton = $('#id_submit')
         let checkout = new cp.Checkout({
-            publicId: 'pk_aad02fa59dec0bacabf00955821fd',
+            publicId: "pk_aad02fa59dec0bacabf00955821fd",
             container: document.getElementById("recarringForm")
         });
 
 
-        $(submitButton).click(
-            function createCryptogram(event) {
-                event.preventDefault()
-                checkout.createPaymentCryptogram()
-                    .then((cryptogram) => {
-                        console.log("here is cryptogram");
-                        console.log(cryptogram); // криптограмма
-                    }).catch((errors) => {
-                    console.log('i am here')
-                    console.log(errors)
-                });
-            }
+        $(submitButton).click(function (event) {
+            event.preventDefault()
+            checkout.createPaymentCryptogram()
+                .then((cryptogram) => {
+                    console.log(cryptogram);
+                    $.ajax({
+                        url: "https://api.cloudpayments.ru/payments/cards/auth",
+                        method: "POST",
+                        data: {
+                            Amount: 100,
+                            IpAddress: user_ip,
+                            CardCryptogramPacket: cryptogram,
+                            AccountId: "test@mail.com",
+                            publicId: "pk_aad02fa59dec0bacabf00955821fd",
+                            password: "2be5e223e5f04f450353ed6710b08814",
+                        },
+                        success: function (data) {
+                            {#redirectNext(`https://acs.cloudpayments.ru/test-get?PaReq=%2B%2FeyJNZXJjaGFudE5hbWUiOm51bGwsIkZpcnN0U2l4IjoiNTUzNjkxIiwiTGFzdEZvdXIiOiI4MzUyIiwiQW1vdW50IjoxMDAuMCwiQ3VycmVuY3lDb2RlIjoiUlVCIiwiRGF0ZSI6IjIwMjMtMDYtMjNUMDA6MDA6MDArMDA6MDAiLCJDdXN0b21lck5hbWUiOm51bGwsIkN1bHR1cmVOYW1lIjoicnUtUlUiLCJEZXNjcmlwdGlvbiI6bnVsbCwiTWVyY2hhbnRMb2dvVXJsIjpudWxsfQ%3D%3D&TermUrl=http%3A%2F%2Flocalhost%3A8001%2Ftours%2F1&MD=1745614555`)#}
+                            console.log(data)
+                            console.log(data.Model.AcsUrl)
+                            console.log(data.Model.PaReq)
+                            console.log(data.Model.TransactionId)
+                            let csrfToken = $("input[name='csrfmiddlewaretoken']").attr("value")
+                            $('#pareq').val(data.Model.PaReq)
+                            $('#md').val(data.Model.TransactionId)
+                            $('#termurl').val("http://localhost:8001/tours/")
+                            $('#stage_form').attr("action", data.Model.AcsUrl)
+                            $('#stage_form').submit()
+
+
+
+                            {#$.ajax({#}
+                            {#    url: data.Model.AcsUrl,#}
+                            {#    method: "post",#}
+                            {#    data: {#}
+                            {#        MD: data.Model.TransactionId,#}
+                            {#        PaReq: data.Model.PaReq,#}
+                            {#        TermUrl: "http://localhost:8001/",#}
+                            {#        #}
+                            {#    }#}
+                            {# })#}
+
+                        },
+                        error: function (response, status) {
+                            console.log("ERROR")
+                            console.log(status)
+                            console.log(response)
+                        },
+                    });
+                }).catch((errors) => {
+                console.log("here errors")
+                console.log(errors)
+            });
+        })
 
     </script>
 
+    {#    <button type="button" id="id_submit" class="btn btn-primary">Поехали</button>#}
 
+    {#    <script>#}
+    {#this.pay = function () {#}
+    {#    var widget = new cp.CloudPayments();#}
+    {#    widget.pay('auth', // или 'charge'#}
+    {#        { //options#}
+    {#            publicId: 'pk_aad02fa59dec0bacabf00955821fd', //id из личного кабинета#}
+    {#            description: 'Оплата товаров в example.com', //назначение#}
+    {#            amount: 100, //сумма#}
+    {#            currency: 'RUB', //валюта#}
+    {#            accountId: 'user@example.com', //идентификатор плательщика (необязательно)#}
+    {#            invoiceId: '1234567', //номер заказа  (необязательно)#}
+    {#            email: 'user@example.com', //email плательщика (необязательно)#}
+    {#            skin: "mini", //дизайн виджета (необязательно)#}
+    {#            data: {#}
+    {#                myProp: 'myProp value'#}
+    {#            }#}
+    {#        },#}
+    {#        {#}
+    {#            onSuccess: function (data) { // success#}
+    {#                console.log("заморозили 100 руб")#}
+    {#                console.log(data)#}
+    {#            },#}
+    {#            onFail: function (reason, options) { // fail#}
+    {#                //действие при неуспешной оплате#}
+    {#            },#}
+    {#            onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.#}
+    {#                //например вызов вашей аналитики Facebook Pixel#}
+    {#            }#}
+    {#        }#}
+    {#    )#}
+    {# };#}
+    {#$('#id_submit').click(pay);#}
+    {#    </script>#}
 {% endblock %}
 
 

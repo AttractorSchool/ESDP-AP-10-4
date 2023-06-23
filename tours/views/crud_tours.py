@@ -39,6 +39,13 @@ class TourListView(ListView):
             tour.save()
         return super().get(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        print(args)
+        print(kwargs)
+
+
+
+
     def get_queryset(self):
         queryset = super(TourListView, self).get_queryset()
         return queryset.filter(moderation_status='CONFIRMED')
