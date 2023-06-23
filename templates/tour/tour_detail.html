@@ -51,11 +51,13 @@
 
                 {# Booking button #}
                 {% if user not in tour.tourists.all and user.is_tourist and tour.moderation_status == 'CONFIRMED' %}
-                    <div class="card-footer">
-                        <form action="{% url 'book_tours' tour.pk %}" method="POST">
-                            {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Забронировать' %}
-                        </form>
-                    </div>
+                    {% if tour.tourists.count < tour.max_number_of_tourists %}
+                        <div class="card-footer">
+                            <form action="{% url 'book_tours' tour.pk %}" method="POST">
+                                {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Забронировать' %}
+                            </form>
+                        </div>
+                    {% endif %}
                 {% elif user in tour.tourists.all and tour.moderation_status == 'CONFIRMED' %}
                     <div class="card-footer">
                         <form method="POST" action="{% url 'book_tours' tour.pk %}">
@@ -64,7 +66,6 @@
                     </div>
                 {% endif %}
 
-                {{ user.rating_by_tourist.tourist }}
 
                 {% if user in tour.tourists.all and tour.moderation_status == 'FINISHED' %}
                     {% if user not in user.rating_by_tourist.all %}

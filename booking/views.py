@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin
 from tours.models import Tour
+from django.contrib import messages
 
 
 ALLOW_TO_BOOK_OR_CANCEL = [
@@ -22,10 +23,11 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
             Booking.objects.filter(user=request.user, tour=tour).delete()
             return redirect('tour_detail', pk=pk)
 
-        Booking.objects.create(
-            user=request.user,
-            tour=tour,
-        )
+        if tour.max_number_of_tourists > tour.tourists.count():
+            Booking.objects.create(
+                user=request.user,
+                tour=tour,
+            )
 
         return redirect('tour_detail', pk=pk)
 
