@@ -1,3 +1,4 @@
+from choices.status_choices import BookingChoice
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -17,6 +18,18 @@ class Booking(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Тур',
     )
+    booking_status = models.CharField(
+        max_length=256,
+        null=False,
+        choices=BookingChoice.choices,
+        default=BookingChoice.SENT_TO_VERIFICATION,
+    )
+
+    def max_seat_hold_price(self):
+        return self.tour.price / self.tour.min_number_of_tourists
+
+    def hold_sum(self):
+        return self.passengers.count() * self.max_seat_hold_price()
 
     def __str__(self):
         return f'{self.user} | {self.tour}'

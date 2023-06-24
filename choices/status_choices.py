@@ -19,3 +19,10 @@ class StatusChoice(models.TextChoices):
     REFUSED = 'REFUSED', 'Отказ'
     FINISHED = 'FINISHED', 'Завершён'
     STARTED = 'STARTED', 'Начался'
+
+
+class BookingChoice(models.TextChoices):
+    RESERVED = 'RESERVED', 'Зарезервирован'
+    HOLD = 'HOLD', 'Удержано'
+    CANCELED = 'CANCELED', 'Отменено'
+    SENT_TO_VERIFICATION = 'SENT TO VERIFICATION', 'Отправлен на проверку'
