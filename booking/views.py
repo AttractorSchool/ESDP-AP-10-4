@@ -2,6 +2,7 @@ from booking.forms.passengers import PassengerForm
 from booking.models import Booking
 from booking.models import Passenger
 from choices.status_choices import StatusChoice, BookingChoice
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -29,6 +30,13 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
             user=request.user,
             tour=tour,
             booking_status=BookingChoice.RESERVED,
+        )
+
+        passenger = Passenger.objects.create(
+            first_name=request.user.first_name,
+            last_name=request.user.last_name,
+            birthdate=request.user.birthdate,
+            booking=Booking.objects.get(user=request.user, tour=tour),
         )
 
         return redirect('add_passengers', pk=booking.pk)

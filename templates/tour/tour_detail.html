@@ -24,8 +24,11 @@
 
                     <p class="card-text" style="color:orange;"><b>Оценка: {{ tour.average_rating }}</b></p>
 
-                    МАКС ЦЕНА {{ tour.users_set.all }}
-                    <p>ХОЛД {% for i in tour.users.all %} {{ i.hold_sum }} {% endfor %}</p>
+                   {# МАКС ЦЕНА {{ tour.users_set.all }} #}
+                    {# <p>ХОЛД {% for i in tour.users.all %} {{ i.hold_sum }} {% endfor %}</p> #}
+
+                    {{ tour.tourists.count }}
+
 
                     {% if user in tour.tourists.all %}
                         <p class="card-text fw-bold text-success">
