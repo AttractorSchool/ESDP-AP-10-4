@@ -3,3 +3,4 @@ django-bootstrap5
 django-environ
 psycopg2-binary
 django-cors-headers
+httpx

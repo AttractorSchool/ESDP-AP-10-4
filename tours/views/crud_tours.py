@@ -1,3 +1,6 @@
+import httpx
+import json
+
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
@@ -44,15 +47,32 @@ class TourListView(ListView):
 
     def post(self, request, *args, **kwargs):
         print(args)
-        print(request.body)
         print(kwargs)
+        auth_params = request.POST
+        print(auth_params)
+        print(auth_params.get('PaRes'))
+        print(type(auth_params.get('MD')))
+        md = int(auth_params.get('MD'))
+        print(type(md))
+
+        r = httpx.post('https://api.cloudpayments.ru/payments/cards/post3ds',
+                       json={
+                           'TransactionId': md,
+                           'PaRes': str(auth_params.get('PaRes')),
+                           'publicId': 'pk_aad02fa59dec0bacabf00955821fd',
+                           'password': '2be5e223e5f04f450353ed6710b08814',
+                       }
+                      )
+        print(r.headers)
+        print(r.content)
+        print(r.json())
+
         return redirect("tour_list")
 
 
-
-    def get_queryset(self):
-        queryset = super(TourListView, self).get_queryset()
-        return queryset.filter(moderation_status='CONFIRMED')
+def get_queryset(self):
+    queryset = super(TourListView, self).get_queryset()
+    return queryset.filter(moderation_status='CONFIRMED')
 
 
 class TourCreateView(CreateView):

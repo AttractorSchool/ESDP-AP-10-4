@@ -31,7 +31,7 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
 
         return redirect('tour_detail', pk=pk)
 
-    def get(self):
+    def get(self, request, *args, **kwargs):
         return redirect('tour_list')
 
     def test_func(self):
@@ -44,4 +44,9 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
 
 class RecarringView(TemplateView):
     template_name = "tour/booking/recarring.html"
+
+    # get_cont
+    #
+    # # def get(self, request, *args, **kwargs):
+    #
 
