@@ -1,6 +1,6 @@
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
@@ -8,6 +8,8 @@ from django.views.generic.edit import FormMixin
 from tours.forms.tour_create_form import TourCreateForm
 from tours.models.tour import Tour
 from tours.forms.tour_rating_create_form import TourRatingCreateForm
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
@@ -21,6 +23,7 @@ ALLOWED_TO_EDIT = [
 ]
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TourListView(ListView):
     model = Tour
     context_object_name = 'tours'
@@ -41,8 +44,9 @@ class TourListView(ListView):
 
     def post(self, request, *args, **kwargs):
         print(args)
+        print(request.body)
         print(kwargs)
-
+        return redirect("tour_list")
 
 
 
