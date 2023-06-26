@@ -4,7 +4,8 @@ from booking.models import Passenger
 from choices.status_choices import StatusChoice, BookingChoice
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.forms import formset_factory
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import CreateView
@@ -52,17 +53,38 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
             return False
 
 
-class AddPassengersView(CreateView):
-    template_name = 'passengers_form/passenger_form.html'
-    model = Passenger
-    form_class = PassengerForm
+# class AddPassengersView(CreateView):
+#     template_name = 'passengers_form/passenger_form.html'
+#     model = Passenger
+#     form_class = PassengerForm
+#
+#     def form_valid(self, form):
+#         booking = get_object_or_404(Booking, pk=self.kwargs.get('pk'))
+#         passengers = form.save(commit=False)
+#         passengers.booking = booking
+#         passengers.save()
+#         return redirect(self.get_success_url())
+#
+#     def get_success_url(self):
+#         return reverse('tourist_profile', kwargs={'pk': self.request.user.pk})
 
-    def form_valid(self, form):
-        booking = get_object_or_404(Booking, pk=self.kwargs.get('pk'))
-        passengers = form.save(commit=False)
-        passengers.booking = booking
-        passengers.save()
-        return redirect(self.get_success_url())
+class AddPassengersView(View):
+    def post(self, request, pk):
+        booking = get_object_or_404(Booking, pk=pk)
+        forms_count = booking.tour.max_number_of_tourists - booking.passengers.count()
+        PassengerFormSet = formset_factory(PassengerForm, extra=forms_count)
+        formset = PassengerFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                passengers = form.save(commit=False)
+                passengers.booking = booking
+                passengers.save()
+            return redirect('tourist_profile', pk=self.request.user.pk)
+        return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
 
-    def get_success_url(self):
-        return reverse('tourist_profile', kwargs={'pk': self.request.user.pk})
+    def get(self, request, pk):
+        booking = get_object_or_404(Booking, pk=pk)
+        forms_count = booking.tour.max_number_of_tourists - booking.passengers.count()
+        PassengerFormSet = formset_factory(PassengerForm, extra=forms_count)
+        formset = PassengerFormSet()
+        return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
