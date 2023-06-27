@@ -1,3 +1,7 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import TemplateView
+
 from booking.forms.passengers import PassengerForm
 from booking.models import Booking
 from booking.models import Passenger
@@ -65,15 +69,19 @@ class AddPassengersView(View):
                 if passengers.first_name and passengers.last_name and passengers.birthdate:
                     passengers.booking = booking
                     passengers.save()
-
-                break
-
-            # return redirect('tourist_profile', pk=self.request.user.pk)
-            return redirect('reccaring', pk=tour.pk)
-
+                # break
+            return HttpResponseRedirect(reverse('recarring') + f"?tour_id={tour.pk}")
         return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
 
     def get(self, request, pk, passengers_count):
         PassengerFormSet = formset_factory(PassengerForm, extra=passengers_count)
         formset = PassengerFormSet()
         return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
+
+
+
+class RecarringView(TemplateView):
+    template_name = "tour/booking/recarring.html"
+
+
+
