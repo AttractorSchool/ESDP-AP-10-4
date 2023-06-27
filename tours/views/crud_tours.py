@@ -1,5 +1,4 @@
 import httpx
-import json
 
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -46,27 +45,19 @@ class TourListView(ListView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print(args)
-        print(kwargs)
         auth_params = request.POST
-        print(auth_params)
-        print(auth_params.get('PaRes'))
-        print(type(auth_params.get('MD')))
-        md = int(auth_params.get('MD'))
-        print(type(md))
+        MD = int(auth_params.get('MD'))
+        PaRes = auth_params.get('PaRes')
 
-        r = httpx.post('https://api.cloudpayments.ru/payments/cards/post3ds',
-                       json={
-                           'TransactionId': md,
-                           'PaRes': str(auth_params.get('PaRes')),
-                           'publicId': 'pk_aad02fa59dec0bacabf00955821fd',
-                           'password': '2be5e223e5f04f450353ed6710b08814',
-                       }
-                      )
-        print(r.headers)
-        print(r.content)
+        r = httpx.post(
+            'https://api.cloudpayments.ru/payments/cards/post3ds',
+            auth=("pk_aad02fa59dec0bacabf00955821fd", "9b431e1c5d36c6c36d01b7635751af5f"),
+            json={'TransactionId': MD, 'PaRes': PaRes}
+        )
+
+        # if token:
+
         print(r.json())
-
         return redirect("tour_list")
 
 
@@ -103,6 +94,20 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
     model = Tour
     context_object_name = 'tour'
     form_class = TourRatingCreateForm
+
+    # def post:
+    #
+    #     r = httpx.post(
+    #         'https://api.cloudpayments.ru/payments/cards/post3ds',
+    #         auth=("pk_aad02fa59dec0bacabf00955821fd", "9b431e1c5d36c6c36d01b7635751af5f"),
+    #         json={'TransactionId': MD, 'PaRes': PaRes}
+    #     )
+    #
+    #     if token:
+    #         self.object.booking.filter(user=request.user)
+
+
+
 
     def get(self, request, pk, *args, **kwargs):
         tour = get_object_or_404(self.model, pk=pk)
