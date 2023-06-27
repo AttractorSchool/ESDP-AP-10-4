@@ -56,9 +56,10 @@
                 {# Booking button #}
                 {% if user not in tour.tourists.all and user.is_tourist and tour.moderation_status == 'CONFIRMED' %}
                     {% if tour.tourists.count < tour.max_number_of_tourists %}
+
                         <div class="card-footer">
                             <form action="{% url 'create_booking' tour.pk %}" method="POST">
-                                {# <input id="qty_passengers" name="passengers" type="number"> #}
+                                <input id="qty_passengers" name="passengers" type="number">
                                 {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Забронировать' %}
                             </form>
                         </div>

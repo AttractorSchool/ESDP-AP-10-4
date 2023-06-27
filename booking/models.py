@@ -39,14 +39,14 @@ class Passenger(models.Model):
     first_name = models.CharField(
         max_length=256,
         blank=False,
-        null=False,
+        null=True,
         verbose_name='Имя пассажира',
     )
 
     last_name = models.CharField(
         max_length=256,
         blank=False,
-        null=False,
+        null=True,
         verbose_name='Фамилия пассажира',
     )
 
@@ -56,6 +56,7 @@ class Passenger(models.Model):
         to='booking.Booking',
         related_name='passengers',
         on_delete=models.CASCADE,
+        null=True,
         verbose_name='Бронирование',
     )
 

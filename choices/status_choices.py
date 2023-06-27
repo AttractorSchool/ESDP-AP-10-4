@@ -22,6 +22,7 @@ class StatusChoice(models.TextChoices):
 
 
 class BookingChoice(models.TextChoices):
+    CREATED = 'CREATED', 'Создан'
     RESERVED = 'RESERVED', 'Зарезервирован'
     HOLD = 'HOLD', 'Удержано'
     CANCELED = 'CANCELED', 'Отменено'
