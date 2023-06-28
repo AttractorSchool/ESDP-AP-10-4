@@ -10,8 +10,10 @@ class TourImage(models.Model):
     )
 
     image = models.ImageField(
-        upload_to='images/{tour_title}'.format(tour_title=tour.title),
+        null=True,
+        blank=True,
+        upload_to='images',
     )
 
     def __str__(self):
-        return f'{self.tour.title} {self.image.url}'
+        return f'Тур: {self.tour.title} | Картинка: {self.image.url}'

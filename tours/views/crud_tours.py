@@ -1,12 +1,14 @@
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import View, CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
 from tours.forms.tour_create_form import TourCreateForm
+from tours.forms.tour_image_form import TourImageForm
 from tours.models.tour import Tour
+from tours.models.image import TourImage
 from tours.forms.tour_rating_create_form import TourRatingCreateForm
 
 ALLOWED_TO_VIEW = [
@@ -49,13 +51,34 @@ class TourCreateView(CreateView):
     model = Tour
     form_class = TourCreateForm
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        form.instance.moderation_status = StatusChoice.SENT_TO_VERIFICATION
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     form.instance.author = self.request.user
+    #     form.instance.moderation_status = StatusChoice.SENT_TO_VERIFICATION
+    #     return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse('tour_detail', kwargs={'pk': self.object.pk})
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        images = request.FILES.getlist('image')
+        if form.is_valid():
+            tour = form.save(commit=False)
+            tour.author = self.request.user
+            tour.moderation_status = StatusChoice.SENT_TO_VERIFICATION
+            tour.save()
+
+            for image in images:
+                TourImage.objects.create(tour=tour, image=image)
+
+            return redirect(reverse('tour_detail', kwargs={'pk': tour.pk}))
+        else:
+            print(form.errors)
+
+    def get(self, request, *args, **kwargs):
+        tour_form = TourCreateForm()
+        image_form = TourImageForm()
+        return render(request, self.template_name, context={
+            'form': tour_form,
+            'image_form': image_form,
+        })
 
     def test_func(self):
         if self.request.user.is_authenticated:
