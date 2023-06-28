@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import View, CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
 from tours.forms.tour_create_form import TourCreateForm
 from tours.forms.tour_image_form import TourImageForm
@@ -69,8 +69,6 @@ class TourCreateView(CreateView):
                 TourImage.objects.create(tour=tour, image=image)
 
             return redirect(reverse('tour_detail', kwargs={'pk': tour.pk}))
-        else:
-            print(form.errors)
 
     def get(self, request, *args, **kwargs):
         tour_form = TourCreateForm()
