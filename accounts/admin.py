@@ -1,4 +1,4 @@
-from choices import StatusChoice
+from choices import ProfileStatusChoice
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 
@@ -7,10 +7,10 @@ from .utils import create_profile, create_user
 
 
 ALLOWED_TO_EDIT = [
-    StatusChoice.NOT_VERIFIED,
-    StatusChoice.SENT_TO_REWORK,
-    StatusChoice.SENT_TO_VERIFICATION,
-    StatusChoice.REFUSED,
+    ProfileStatusChoice.NOT_VERIFIED,
+    ProfileStatusChoice.SENT_TO_REWORK,
+    ProfileStatusChoice.SENT_TO_VERIFICATION,
+    ProfileStatusChoice.REFUSED,
 ]
 
 
@@ -44,7 +44,7 @@ class GuideProfileAdmin(admin.ModelAdmin):
         readonly_fields = super().get_readonly_fields(request, obj)
 
         if request.user.is_superuser:
-            if obj and obj.verification_status == StatusChoice.CONFIRMED:
+            if obj and obj.verification_status == ProfileStatusChoice.CONFIRMED:
                 readonly_fields += ('verification_status',)
 
         return readonly_fields
