@@ -1,0 +1,27 @@
+<div id="carousel" class="carousel slide mb-3" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-4">
+        {% for tour_image_obj in tour.images.all %}
+            {% if forloop.first %}
+                <div class="carousel-item active">
+                    <img src="{{ tour_image_obj.image.url }}" class="d-block w-100 tour-image" alt="image">
+                </div>
+            {% else %}
+                <div class="carousel-item">
+                    <img src="{{ tour_image_obj.image.url }}" class="d-block w-100 tour-image" alt="image">
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Previous control button -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+
+    <!-- Next control button -->
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
