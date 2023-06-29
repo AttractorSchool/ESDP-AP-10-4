@@ -51,11 +51,6 @@ class TourCreateView(CreateView):
     model = Tour
     form_class = TourCreateForm
 
-    # def form_valid(self, form):
-    #     form.instance.author = self.request.user
-    #     form.instance.moderation_status = StatusChoice.SENT_TO_VERIFICATION
-    #     return super().form_valid(form)
-
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         images = request.FILES.getlist('image')
@@ -79,9 +74,10 @@ class TourCreateView(CreateView):
         })
 
     def test_func(self):
+        is_guide = self.request.user.is_guide
+        status = self.request.user.guide_profile.verification_status
         if self.request.user.is_authenticated:
-            if self.request.user.is_guide \
-                    and self.request.user.guide_profile.verification_status == StatusChoice.CONFIRMED:
+            if is_guide and status == StatusChoice.CONFIRMED:
                 return True
         else:
             return False
