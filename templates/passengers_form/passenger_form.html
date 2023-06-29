@@ -4,7 +4,7 @@
 {% block content %}
     <form action="" method="POST">
     {% csrf_token %}
-    {{ formset.as_p }}
-    {% bootstrap_button button_type="submit" content="Забронировать"%}
+    {% bootstrap_formset formset %}
+    {% bootstrap_button button_type="submit" content="Перейти к оплате"%}
     </form>
 {% endblock %}

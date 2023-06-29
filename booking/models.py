@@ -25,11 +25,8 @@ class Booking(models.Model):
         default=BookingChoice.SENT_TO_VERIFICATION,
     )
 
-    def max_seat_hold_price(self):
-        return self.tour.price / self.tour.min_number_of_tourists
-
     def hold_sum(self):
-        return self.passengers.count() * self.max_seat_hold_price()
+        return self.passengers.count() * self.tour.max_seat_hold_price()
 
     def __str__(self):
         return f'{self.user} | {self.tour}'
@@ -38,19 +35,19 @@ class Booking(models.Model):
 class Passenger(models.Model):
     first_name = models.CharField(
         max_length=256,
-        blank=False,
+        blank=True,
         null=True,
         verbose_name='Имя пассажира',
     )
 
     last_name = models.CharField(
         max_length=256,
-        blank=False,
+        blank=True,
         null=True,
         verbose_name='Фамилия пассажира',
     )
 
-    birthdate = models.DateField(null=False, blank=False)
+    birthdate = models.DateField(null=True, blank=True)
 
     booking = models.ForeignKey(
         to='booking.Booking',
