@@ -46,7 +46,7 @@ class TourListView(ListView):
         return queryset.filter(moderation_status='CONFIRMED')
 
 
-class TourCreateView(CreateView):
+class TourCreateView(UserPassesTestMixin, CreateView):
     template_name = 'tour/tour_create.html'
     model = Tour
     form_class = TourCreateForm
