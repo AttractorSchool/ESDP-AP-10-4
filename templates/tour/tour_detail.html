@@ -29,7 +29,7 @@
                     <p class="card-text">Максимальное количество людей на тур: {{ tour.max_number_of_tourists }}</p>
                     <p class="card-text">Минимальное количество людей на тур: {{ tour.min_number_of_tourists }}</p>
                     <p class="card-text">Цена: {{ tour.price }} тенге</p>
-                    <p class="card-text"><b>Депозит: {{ tour.get_deposit }} тенге</b></p>
+                    <p class="card-text"><b>Сумма брони за одного человека: {{ tour.max_seat_hold_price }} тенге</b></p>
                     <p class="card-text"><b>Кол-во людей, забронировавших тур: {{ tour.tourists.count }}</b></p>
 
 
@@ -37,17 +37,21 @@
 
 
 
-                    {% if user in tour.tourists.all %}
-                        <p class="card-text fw-bold text-success">
-                            Вы забронировали тур.
-                            С учётом количества броней, оставшаяся сумма
-                            составляет: {{ tour.get_grand_total_for_booking }} тенге
-                        </p>
-                    {% elif user not in tour.tourists.all and user != tour.author %}
-                        <p class="card-text">
-                            <span class="fw-bold"> С учётом количества броней, сумма тура для вас составляет: {{ tour.get_grand_total }} тенге </span>
-                        </p>
-                    {% endif %}
+
+
+               {#     {% if user in tour.tourists.all %}  #}
+               {#          <p class="card-text fw-bold text-success"> #}
+               {#              Вы забронировали тур. #}
+               {#              С учётом количества броней, оставшаяся сумма #}
+               {#              составляет: {{ tour.get_grand_total_for_booking }} тенге #}
+               {#          </p> #}
+               {#      {% elif user not in tour.tourists.all and user != tour.author %} #}
+               {#          <p class="card-text"> #}
+               {#              <span class="fw-bold"> С учётом количества броней, сумма тура для вас составляет: {{ tour.get_grand_total }} тенге </span> #}
+               {#          </p> #}
+               {#      {% endif %} #}
+
+
                     {% if user == tour.author %}
                         <p>Статус: {{ tour.get_moderation_status_display }} </p>
                         <p class="card-text"><small class="text-muted">Обновлено: {{ tour.updated_at }}</small></p>
@@ -62,20 +66,30 @@
 
                 {# Booking button #}
                 {% if user not in tour.tourists.all and user.is_tourist and tour.moderation_status == 'CONFIRMED' %}
-                    <div class="card-footer">
-                        <form action="{% url 'book_tours' tour.pk %}" method="POST">
-                            {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Забронировать' %}
-                        </form>
-                    </div>
+                    {% if tour.tourists.count < tour.max_number_of_tourists %}
+
+                        <div class="card-footer">
+                            {{ tour.get_free_place }}
+                            <b>Сколько вас поедет ? Осталось мест {{ tour.get_free_place }}</b>
+                            <form action="{% url 'create_booking' tour.pk %}" method="POST">
+                                <input id="qty_passengers" name="passengers" type="number" required="True" max="{{ tour.get_free_place }}" min="1" value="1">
+                                {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.errors }}
+                            </div>
+                            {% endif %}
+                                {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Перейти к заполнению пассажиров' %}
+                            </form>
+                        </div>
+                    {% endif %}
                 {% elif user in tour.tourists.all and tour.moderation_status == 'CONFIRMED' %}
                     <div class="card-footer">
-                        <form method="POST" action="{% url 'book_tours' tour.pk %}">
+                        <form method="POST" action="{% url 'create_booking' tour.pk %}">
                             {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-danger' button_text='Отменить бронь' %}
                         </form>
                     </div>
                 {% endif %}
 
-                {{ user.rating_by_tourist.tourist }}
 
                 {% if user in tour.tourists.all and tour.moderation_status == 'FINISHED' %}
                     {% if user not in user.rating_by_tourist.all %}

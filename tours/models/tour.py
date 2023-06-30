@@ -106,20 +106,20 @@ class Tour(models.Model):
         validator_date(self.start_date, self.end_date)
         possibility_of_creating_a_tour(self.start_date)
 
-    def get_deposit(self):
-        return round(self.price / self.max_number_of_tourists)
-
-    def get_grand_total(self):
-        tourists_count = self.tourists.count() + 1
-        if tourists_count == 0:
-            return self.price
-
-        return round(self.price / tourists_count)
-
-    def get_grand_total_for_booking(self):
-        tourists_count = self.tourists.count()
-        grand_total = (self.price / tourists_count) - self.get_deposit()
-        return round(grand_total)
+    # def get_deposit(self):
+    #     return round(self.price / self.max_number_of_tourists)
+    #
+    # def get_grand_total(self):
+    #     tourists_count = self.tourists.count() + 1
+    #     if tourists_count == 0:
+    #         return self.price
+    #
+    #     return round(self.price / tourists_count)
+    #
+    # def get_grand_total_for_booking(self):
+    #     tourists_count = self.tourists.count()
+    #     grand_total = (self.price / tourists_count) - self.get_deposit()
+    #     return round(grand_total)
 
     @property
     def average_rating(self):
@@ -132,6 +132,16 @@ class Tour(models.Model):
         except ZeroDivisionError:
             return 0
         return round(avg, 1)
+
+    def get_free_place(self):
+        active_passengers_count = self.max_number_of_tourists
+        for passenger in self.users.all():
+            if passenger.passengers:
+                active_passengers_count = active_passengers_count - passenger.passengers.count()
+        return active_passengers_count
+
+    def max_seat_hold_price(self):
+        return self.price / self.min_number_of_tourists
 
     def __str__(self):
         return f'Tour {self.title} by {self.author}'

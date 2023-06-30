@@ -1,8 +1,11 @@
+import httpx
 from choices import StatusChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
 from tours.forms.tour_create_form import TourCreateForm
@@ -10,6 +13,7 @@ from tours.forms.tour_image_form import TourImageForm
 from tours.models.tour import Tour
 from tours.models.image import TourImage
 from tours.forms.tour_rating_create_form import TourRatingCreateForm
+
 
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
@@ -89,6 +93,7 @@ class TourCreateView(UserPassesTestMixin, CreateView):
         return False
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
     template_name = 'tour/tour_detail.html'
     model = Tour
@@ -106,6 +111,18 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
 
         tour.save()
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        auth_params = request.POST
+        MD = int(auth_params.get('MD'))
+        PaRes = auth_params.get('PaRes')
+
+        httpx.post(
+            'https://api.cloudpayments.ru/payments/cards/post3ds',
+            auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
+            json={'TransactionId': MD, 'PaRes': PaRes},
+        )
+        return redirect('tour_detail', pk=kwargs.get('pk'))
 
     def test_func(self):
         if self.request.user == self.get_object().author:
