@@ -64,6 +64,11 @@ class TourCreateView(UserPassesTestMixin, CreateView):
                 TourImage.objects.create(tour=tour, image=image)
 
             return redirect(reverse('tour_detail', kwargs={'pk': tour.pk}))
+        else:
+            return render(request, self.template_name, context={
+                'form': form,
+                'image_form': TourImageForm(),
+            })
 
     def get(self, request, *args, **kwargs):
         tour_form = TourCreateForm()
