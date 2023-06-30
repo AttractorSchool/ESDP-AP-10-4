@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Tour, TourRating
+from .models import Tour, TourRating, TourImage
 
 
 class TourAdmin(admin.ModelAdmin):
@@ -28,3 +28,4 @@ class TourRatingAdmin(admin.ModelAdmin):
 
 admin.site.register(Tour, TourAdmin)
 admin.site.register(TourRating, TourRatingAdmin)
+admin.site.register(TourImage)
