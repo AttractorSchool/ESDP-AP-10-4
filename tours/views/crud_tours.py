@@ -117,7 +117,7 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
         MD = int(auth_params.get('MD'))
         PaRes = auth_params.get('PaRes')
 
-        r = httpx.post(
+        httpx.post(
             'https://api.cloudpayments.ru/payments/cards/post3ds',
             auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
             json={'TransactionId': MD, 'PaRes': PaRes},
