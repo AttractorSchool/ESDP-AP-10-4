@@ -13,7 +13,7 @@ from tours.forms.tour_image_form import TourImageForm
 from tours.models.tour import Tour
 from tours.models.image import TourImage
 from tours.forms.tour_rating_create_form import TourRatingCreateForm
-from tours.models.tour import Tour
+
 
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
@@ -122,10 +122,6 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
             auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
             json={'TransactionId': MD, 'PaRes': PaRes},
         )
-        print(r.json())
-        print(args)
-        print(kwargs)
-        print(request.POST)
         return redirect('tour_detail', pk=kwargs.get('pk'))
 
     def test_func(self):

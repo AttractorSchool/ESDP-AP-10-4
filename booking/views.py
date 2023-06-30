@@ -74,7 +74,6 @@ class AddPassengersView(View):
                 if passengers.first_name and passengers.last_name and passengers.birthdate:
                     passengers.booking = booking
                     passengers.save()
-               # break
             return HttpResponseRedirect(reverse('recarring') + f'?tour_id={tour.pk}')
         return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
 
