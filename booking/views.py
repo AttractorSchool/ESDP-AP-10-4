@@ -27,7 +27,7 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
             Booking.objects.filter(user=request.user, tour=tour).delete()
             return redirect('tour_detail', pk=pk)
 
-        passengers_count = 0
+        passengers_count = 1
         if request.POST.get('passengers'):
             passengers_count = int(request.POST.get('passengers'))
 

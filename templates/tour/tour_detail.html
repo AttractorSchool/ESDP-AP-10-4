@@ -60,7 +60,7 @@
                         <div class="card-footer">
                             <b>Сколько вас поедет ? Осталось мест {{ tour.get_free_place }}</b>
                             <form action="{% url 'create_booking' tour.pk %}" method="POST">
-                                <input id="qty_passengers" name="passengers" type="number" max="{{ tour.get_free_place }}" min="1">
+                                <input id="qty_passengers" name="passengers" type="number" required="True" max="{{ tour.get_free_place }}" min="1">
                                 {% include 'tour/booking/includes/book.html' with button_class='btn btn-outline-success' button_text='Перейти к заполнению пассажиров' %}
                             </form>
                         </div>
