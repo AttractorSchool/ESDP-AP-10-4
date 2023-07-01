@@ -13,7 +13,7 @@ from tours.forms.tour_image_form import TourImageForm
 from tours.models.tour import Tour
 from tours.models.image import TourImage
 from tours.forms.tour_rating_create_form import TourRatingCreateForm
-
+from django.contrib.auth.decorators import login_required
 
 ALLOWED_TO_VIEW = [
     StatusChoice.CONFIRMED,
@@ -117,11 +117,30 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
         MD = int(auth_params.get('MD'))
         PaRes = auth_params.get('PaRes')
 
-        httpx.post(
+        response = httpx.post(
             'https://api.cloudpayments.ru/payments/cards/post3ds',
             auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
             json={'TransactionId': MD, 'PaRes': PaRes},
         )
+
+        response_data = response.json()
+        success = response_data['Success']
+        token = response_data['Model']['Token']
+
+        if success:
+            if request.user.is_authenticated:
+                user = request.user
+                user.encrypted_card_token = token
+                user.save()
+            else:
+                print('emae')
+
+        print(request.user)
+        print(request)
+        print(success)
+        print(token)
+        print(response_data)
+
         return redirect('tour_detail', pk=kwargs.get('pk'))
 
     def test_func(self):
