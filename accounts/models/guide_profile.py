@@ -1,4 +1,4 @@
-from choices import StatusChoice
+from choices import ProfileStatusChoice
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -13,8 +13,8 @@ class GuideProfile(models.Model):
     verification_status = models.CharField(
         max_length=256,
         null=False,
-        choices=StatusChoice.choices,
-        default=StatusChoice.NOT_VERIFIED)
+        choices=ProfileStatusChoice.choices,
+        default=ProfileStatusChoice.NOT_VERIFIED)
 
     current_location = models.CharField(
         null=False,
