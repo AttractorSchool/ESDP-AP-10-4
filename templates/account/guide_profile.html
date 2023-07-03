@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-    {% with full_name=guide_profile.user.get_full_name status=guide_profile.verification_status %}
+    {% with full_name=guide_profile.user.get_full_name status=guide_profile.verification_status avatar=user.avatar.url%}
         {% include "account/includes/sections/profile_info.html" %}
     {% endwith %}
 
