@@ -20,7 +20,15 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('email', 'first_name', 'last_name', 'password', 'password_confirm', 'is_guide')
+        fields = (
+            'email',
+            'first_name',
+            'last_name',
+            'password',
+            'password_confirm',
+            'avatar',
+            'is_guide',
+        )
 
     def clean(self):
         cleaned_data = super().clean()
