@@ -1,3 +1,3 @@
-from .status_choices import StatusChoice
+from .status_choices import StatusChoice, BookingChoice
 
-__all__ = ['StatusChoice']
+__all__ = ['StatusChoice'], ['BookingChoice']

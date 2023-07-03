@@ -76,7 +76,7 @@
 
         $(submitButton).click(function (event) {
             event.preventDefault()
-            sessionId = Cookies.get('sessionid')
+            const user_id = {{ request.user.id }}
             checkout.createPaymentCryptogram()
                 .then((cryptogram) => {
                     console.log(cryptogram);
@@ -88,7 +88,7 @@
                             Currency: "KZT",
                             IpAddress: user_ip,
                             CardCryptogramPacket: cryptogram,
-                            AccountId: sessionId,
+                            AccountId: user_id,
                             publicId: "pk_aad02fa59dec0bacabf00955821fd",
                             password: "9b431e1c5d36c6c36d01b7635751af5f",
                         },
