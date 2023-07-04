@@ -9,7 +9,7 @@ class TourRatingCreateForm(forms.ModelForm):
                 'type': 'number',
                 'min': 0,
                 'max': 5,
-            }
+            },
         ),
         label='Соответстсвие тура описанию*',
     )
@@ -20,7 +20,7 @@ class TourRatingCreateForm(forms.ModelForm):
                 'type': 'number',
                 'min': 0,
                 'max': 5,
-            }
+            },
         ),
         label='Профессионализм гида*',
     )
