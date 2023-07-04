@@ -4,6 +4,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/image.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -100,13 +101,16 @@
                         </form>
                     {% endif %}
                 {% endif %}
-
-                {% for rating in tour.tour_rating.all %}
-                    {{ rating.tourist }} Оценки: {{ rating.correspondence }}, {{ rating.professionalism }}
-                    <p>Текст комментария: {{ rating.text_review }}</p>
-                {% endfor %}
-
             </div>
+
+            <div class="row justify-content-center mb-5">
+                {% for rating in tour.tour_rating.all %}
+                    <div class="col-12">
+                        {% include 'tour/includes/review.html' %}
+                    </div>
+                {% endfor %}
+            </div>
+
         </div>
     </div>
 {% endblock %}
