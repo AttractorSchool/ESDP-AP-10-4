@@ -1,0 +1,28 @@
+<div class="review p-4 rounded-4 border border-1">
+    <div class="wrapper d-flex flex-wrap">
+
+        <div class="avatar-profile me-3">
+            <img src="{{ rating.tourist.avatar.url }}"
+                 alt="avatar"
+                 style="width: 128px; height: 128px">
+        </div>
+
+        <div class="detail flex-grow-1">
+            <a class="author fw-bold d-block" href="{% url 'tourist_profile' rating.tourist.pk %}">
+                {{ rating.tourist }}
+            </a>
+
+            <div class="rating-tour">
+                {{ rating.correspondence }}
+            </div>
+
+            <div class="rating-guide">
+                {{ rating.professionalism }}
+            </div>
+
+            <div class="review">
+                {{ rating.text_review }}
+            </div>
+        </div>
+    </div>
+</div>
