@@ -13,7 +13,7 @@ class RegisterView(CreateView):
     context = dict()
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             create_profile(user)

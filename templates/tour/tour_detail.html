@@ -4,6 +4,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/image.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -90,23 +91,36 @@
                     </div>
                 {% endif %}
 
-
-                {% if user in tour.tourists.all and tour.moderation_status == 'FINISHED' %}
-                    {% if user not in user.rating_by_tourist.all %}
-                        <form action="{% url 'tour_rating' tour.pk %}" method="POST">
-                            {% csrf_token %}
-                            {% bootstrap_form form %}
-                            {% bootstrap_button button_type="submit" content="Оценить тур"%}
-                        </form>
-                    {% endif %}
-                {% endif %}
-
-                {% for rating in tour.tour_rating.all %}
-                    {{ rating.tourist }} Оценки: {{ rating.correspondence }}, {{ rating.professionalism }}
-                    <p>Текст комментария: {{ rating.text_review }}</p>
-                {% endfor %}
-
             </div>
+
+            <div class="row mb-5">
+                <div class="col">
+                    <h2>Оценить Тур</h2>
+                </div>
+                <div class="col-12">
+                    {% if user in tour.tourists.all and tour.moderation_status == 'FINISHED' %}
+                        {% if user not in user.rating_by_tourist.all %}
+                            <form action="{% url 'tour_rating' tour.pk %}" method="POST">
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+                                {% bootstrap_button button_type="submit" content="Оценить тур"%}
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-5">
+                <div class="col mb-3">
+                    <h2>Отзывы:</h2>
+                </div>
+                {% for rating in tour.tour_rating.all %}
+                    <div class="col-12">
+                        {% include 'tour/includes/review.html' %}
+                    </div>
+                {% endfor %}
+            </div>
+
         </div>
     </div>
 {% endblock %}

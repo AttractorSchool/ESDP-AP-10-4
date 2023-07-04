@@ -8,7 +8,8 @@ class DateInput(forms.DateInput):
 
 class UserUpdateForm(forms.ModelForm):
     birthdate = forms.DateField(widget=DateInput)
+    avatar = forms.ImageField(widget=forms.FileInput)
 
     class Meta:
         model = get_user_model()
-        fields = ['first_name', 'last_name', 'birthdate']
+        fields = ['first_name', 'last_name', 'birthdate', 'avatar']
