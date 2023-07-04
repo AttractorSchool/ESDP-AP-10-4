@@ -1,7 +1,7 @@
-<div class="dropdown">
-    <button class="btn rounded-3 text-dark btn-light fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="cascadia-font">{{ user.email }}</span>
-    </button>
+<div class="nav-item dropdown">
+    <a class="text-dark btn-light fw-bold dropdown-toggle cascadia-font nav-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ user.email }}
+    </a>
 
     <ul class="dropdown-menu cascadia-font">
         {% if user.is_guide %}
