@@ -1,6 +1,6 @@
 from booking.forms.passengers import PassengerForm
 from booking.models import Booking
-from choices.status_choices import StatusChoice, BookingChoice
+from choices import StatusChoice, BookingChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory

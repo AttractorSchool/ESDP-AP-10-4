@@ -10,6 +10,7 @@ class User(AbstractUser):
     is_guide = models.BooleanField(null=False, default=False)
     is_tourist = models.BooleanField(null=False, default=False)
     birthdate = models.DateField(null=True, blank=False)
+    encrypted_card_token = models.CharField(max_length=255, null=True, blank=True)
 
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'

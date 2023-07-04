@@ -76,6 +76,7 @@
 
         $(submitButton).click(function (event) {
             event.preventDefault()
+            const user_id = {{ request.user.id }}
             checkout.createPaymentCryptogram()
                 .then((cryptogram) => {
                     console.log(cryptogram);
@@ -84,9 +85,10 @@
                         method: "POST",
                         data: {
                             Amount: 100,
+                            Currency: "KZT",
                             IpAddress: user_ip,
                             CardCryptogramPacket: cryptogram,
-                            AccountId: "test@mail.com",
+                            AccountId: user_id,
                             publicId: "pk_aad02fa59dec0bacabf00955821fd",
                             password: "9b431e1c5d36c6c36d01b7635751af5f",
                         },

@@ -1,4 +1,4 @@
-from choices.status_choices import BookingChoice
+from choices import BookingChoice
 from django.contrib.auth import get_user_model
 from django.db import models
 
