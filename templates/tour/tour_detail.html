@@ -36,23 +36,6 @@
 
                     <p class="card-text" style="color:orange;"><b>Оценка: {{ tour.average_rating }}</b></p>
 
-
-
-
-
-               {#     {% if user in tour.tourists.all %}  #}
-               {#          <p class="card-text fw-bold text-success"> #}
-               {#              Вы забронировали тур. #}
-               {#              С учётом количества броней, оставшаяся сумма #}
-               {#              составляет: {{ tour.get_grand_total_for_booking }} тенге #}
-               {#          </p> #}
-               {#      {% elif user not in tour.tourists.all and user != tour.author %} #}
-               {#          <p class="card-text"> #}
-               {#              <span class="fw-bold"> С учётом количества броней, сумма тура для вас составляет: {{ tour.get_grand_total }} тенге </span> #}
-               {#          </p> #}
-               {#      {% endif %} #}
-
-
                     {% if user == tour.author %}
                         <p>Статус: {{ tour.get_moderation_status_display }} </p>
                         <p class="card-text"><small class="text-muted">Обновлено: {{ tour.updated_at }}</small></p>
@@ -103,22 +86,24 @@
                             <form action="{% url 'tour_rating' tour.pk %}" method="POST">
                                 {% csrf_token %}
                                 {% bootstrap_form form %}
-                                {% bootstrap_button button_type="submit" content="Оценить тур"%}
+                                {% bootstrap_button button_type="submit" content="Оценить"%}
                             </form>
                         {% endif %}
                     {% endif %}
                 </div>
             </div>
 
-            <div class="row justify-content-center mb-5">
-                <div class="col mb-3">
-                    <h2>Отзывы:</h2>
-                </div>
-                {% for rating in tour.tour_rating.all %}
-                    <div class="col-12">
-                        {% include 'tour/includes/review.html' %}
+            <div class="row justify-content-center mb-5 g-4">
+                {% if tour.tour_rating.all %}
+                    <div class="col mb-3">
+                        <h2>Отзывы:</h2>
                     </div>
-                {% endfor %}
+                    {% for rating in tour.tour_rating.all %}
+                        <div class="col-12">
+                            {% include 'tour/includes/review.html' %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
 
         </div>
