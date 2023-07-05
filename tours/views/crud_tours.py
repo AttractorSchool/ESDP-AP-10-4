@@ -1,7 +1,6 @@
-import httpx
 from booking.models import Booking
 from choices import StatusChoice, BookingChoice
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -9,6 +8,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
+
+from services.requests import http_client
 from tours.forms.tour_create_form import TourCreateForm
 from tours.forms.tour_image_form import TourImageForm
 from tours.models.tour import Tour
@@ -52,7 +53,7 @@ class TourListView(ListView):
         return queryset.filter(moderation_status='CONFIRMED')
 
 
-class TourCreateView(UserPassesTestMixin, CreateView):
+class TourCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'tour/tour_create.html'
     model = Tour
     form_class = TourCreateForm
@@ -87,12 +88,7 @@ class TourCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         is_guide = self.request.user.is_guide
         status = self.request.user.guide_profile.verification_status
-        if self.request.user.is_authenticated:
-            if is_guide and status == StatusChoice.CONFIRMED:
-                return True
-        else:
-            return False
-        return False
+        return is_guide and status == StatusChoice.CONFIRMED
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -102,8 +98,8 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
     context_object_name = 'tour'
     form_class = TourRatingCreateForm
 
-    def get(self, request, pk, *args, **kwargs):
-        tour = get_object_or_404(self.model, pk=pk)
+    def get(self, request, *args, **kwargs):
+        tour = get_object_or_404(self.model, pk=kwargs.get('pk'))
 
         if timezone.now() >= tour.start_date:
             tour.moderation_status = StatusChoice.STARTED
@@ -119,9 +115,9 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
         MD = int(auth_params.get('MD'))
         PaRes = auth_params.get('PaRes')
 
-        response = httpx.post(
-            'https://api.cloudpayments.ru/payments/cards/post3ds',
-            auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
+        response = http_client.request(
+            method='post',
+            url='/cards/post3ds',
             json={'TransactionId': MD, 'PaRes': PaRes},
         )
 
@@ -138,9 +134,9 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
             booking = Booking.objects.filter(user_id=account_id, tour_id=kwargs.get('pk')).first()
             booking.booking_status = BookingChoice.RESERVED
             booking.save()
-            httpx.post(
-                'https://api.cloudpayments.ru/payments/void',
-                auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
+            http_client.request(
+                method='post',
+                url='/void',
                 json={'TransactionId': MD},
             )
 

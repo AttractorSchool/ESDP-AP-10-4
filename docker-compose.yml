@@ -5,16 +5,14 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.dev
-    environment:
-      DEBUG: 'true'
-      SECRET_KEY: 3+($${l})*g1v3*7c91^vs+!b^af89cf8)73n6-c2h-f-upgmtf@zh(
-      DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+    env_file:
+      - .env
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
-      - '8000:8000'
+      - '8020:8000'
     depends_on:
       postgres:
         condition: service_healthy
