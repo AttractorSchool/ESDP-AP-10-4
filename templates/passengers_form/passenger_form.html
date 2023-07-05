@@ -1,10 +1,42 @@
 {% extends "base.html" %}
 {% load django_bootstrap5%}
 
+{% block css %}
+    <style>
+        .number {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <form action="" method="POST">
-    {% csrf_token %}
-    {% bootstrap_formset formset %}
-    {% bootstrap_button button_type="submit" content="Перейти к оплате"%}
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <div class="row">
+                {% if not forloop.first %}
+                    <hr>
+                {% endif %}
+                <div class="col-12 col-lg-2">
+                    <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+                        <h1 class="number rounded-circle border border-1 d-flex justify-content-center align-items-center">
+                            {{ forloop.counter }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="col">
+                    {% bootstrap_form form %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="row justify-content-center">
+            <button class="btn btn-success rounded-5 my-3 mb-5 w-25" role="button" type="submit">
+                Перейти к оплате
+            </button>
+        </div>
+
     </form>
 {% endblock %}
