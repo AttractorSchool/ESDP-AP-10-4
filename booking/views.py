@@ -1,6 +1,6 @@
 from booking.forms.passengers import PassengerForm
 from booking.models import Booking
-from choices import StatusChoice, BookingChoice
+from choices.status_choices import StatusChoice, BookingChoice
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
@@ -34,11 +34,11 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
         if passengers_count > tour.get_free_place():
             raise ValidationError('Вы превысили допустимое кол-во пассажиров!')
 
-        booking = Booking.objects.create(
-            user=request.user,
-            tour=tour,
-            booking_status=BookingChoice.CREATED,
-        )
+        # booking = Booking.objects.create(
+        #     user=request.user,
+        #     tour=tour,
+        #     booking_status=BookingChoice.CREATED,
+        # )
 
         # passenger = Passenger.objects.create(
         #     first_name=request.user.first_name,
@@ -47,7 +47,7 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
         #     booking=Booking.objects.get(user=request.user, tour=tour),
         # )
 
-        return redirect('add_passengers', pk=booking.pk, passengers_count=passengers_count)
+        return redirect('add_passengers', pk=pk, passengers_count=passengers_count)
 
     def get(self):
         return redirect('tour_list')
@@ -62,19 +62,27 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
 
 class AddPassengersView(View):
     def post(self, request, pk, passengers_count):
-        booking = get_object_or_404(Booking, pk=pk)
-        tour = get_object_or_404(Tour, pk=booking.tour_id)
+        # booking = get_object_or_404(Booking, pk=pk)
+        tour = get_object_or_404(Tour, pk=pk)
         PassengerFormSet = formset_factory(PassengerForm, extra=passengers_count)
         formset = PassengerFormSet(request.POST)
+
         if formset.is_valid():
+            booking = Booking.objects.create(
+                user=request.user,
+                tour=tour,
+                booking_status=BookingChoice.CREATED,
+            )
 
             for form in formset:
                 passengers = form.save(commit=False)
 
-                if passengers.first_name and passengers.last_name and passengers.birthdate:
-                    passengers.booking = booking
-                    passengers.save()
+                # if passengers.first_name and passengers.last_name and passengers.birthdate:
+                passengers.booking = booking
+                passengers.save()
+
             return HttpResponseRedirect(reverse('recarring') + f'?tour_id={tour.pk}')
+
         return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
 
     def get(self, request, pk, passengers_count):
@@ -88,6 +96,7 @@ class AddPassengersView(View):
                 },
             ],
         )
+
         return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
 
 

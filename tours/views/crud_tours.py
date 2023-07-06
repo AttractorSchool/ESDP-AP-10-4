@@ -88,10 +88,8 @@ class TourCreateView(UserPassesTestMixin, CreateView):
         is_guide = self.request.user.is_guide
         status = self.request.user.guide_profile.verification_status
         if self.request.user.is_authenticated:
-            if is_guide and status == StatusChoice.CONFIRMED:
-                return True
-        else:
-            return False
+            return is_guide and status == StatusChoice.CONFIRMED
+
         return False
 
 
@@ -102,8 +100,8 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
     context_object_name = 'tour'
     form_class = TourRatingCreateForm
 
-    def get(self, request, pk, *args, **kwargs):
-        tour = get_object_or_404(self.model, pk=pk)
+    def get(self, request, *args, **kwargs):
+        tour = get_object_or_404(self.model, pk=kwargs.get('pk'))
 
         if timezone.now() >= tour.start_date:
             tour.moderation_status = StatusChoice.STARTED

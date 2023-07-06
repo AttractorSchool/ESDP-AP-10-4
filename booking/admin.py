@@ -5,7 +5,7 @@ from .models import Booking, Passenger
 
 
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'tour', 'booking_status')
+    list_display = ('id', 'user', 'tour', 'booking_status', 'transaction_id')
     list_display_links = ['id']
     list_filter = ('tour', 'user')
     search_fields = ('tour', 'user')

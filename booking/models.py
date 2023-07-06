@@ -24,6 +24,11 @@ class Booking(models.Model):
         choices=BookingChoice.choices,
         default=BookingChoice.SENT_TO_VERIFICATION,
     )
+    transaction_id = models.SmallIntegerField(
+        null=True,
+        blank=True,
+        verbose_name='ID транзакции CP',
+    )
 
     def hold_sum(self):
         return self.passengers.count() * self.tour.max_seat_hold_price()
@@ -35,19 +40,19 @@ class Booking(models.Model):
 class Passenger(models.Model):
     first_name = models.CharField(
         max_length=256,
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         verbose_name='Имя пассажира',
     )
 
     last_name = models.CharField(
         max_length=256,
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         verbose_name='Фамилия пассажира',
     )
 
-    birthdate = models.DateField(null=True, blank=True)
+    birthdate = models.DateField(null=False, blank=False)
 
     booking = models.ForeignKey(
         to='booking.Booking',
