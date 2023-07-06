@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="row justify-content-center">
     <div class="col-12">
         <div class="profile p-4 rounded-4 border border-1">
@@ -5,9 +7,11 @@
 
                 <div class="avatar-profile me-5">
                     <!-- https://cdn.landesa.org/wp-content/uploads/default-user-image.png -->
-                    <img src="{{ avatar }}"
-                         class="user-select-none"
-                         alt="avatar">
+                    {% if not user.avatar %}
+                        <img src="{% static 'images/default_user_avatar.png' %}" class="user-select-none" alt="avatar">
+                    {% else %}
+                        <img src="{{ user.avatar.url }}" class="user-select-none" alt="avatar">
+                    {% endif %}
                 </div>
 
                 <div class="detail flex-grow-1">
