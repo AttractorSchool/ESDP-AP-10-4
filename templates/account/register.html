@@ -7,14 +7,14 @@
     <div class="container">
         <div class="row mt-5">
             <div class="d-flex justify-content-center">
-                <div class="col-lg-4 col-md-8 col-sm-11">
-                    <div class="card shadow">
+                <div class="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card rounded-4 shadow-sm border p-2">
                         <div class="card-body">
                             <form action="" method="POST" enctype="multipart/form-data">
                                 <div class="form">
                                     {% csrf_token %}
                                     {% bootstrap_form form %}
-                                    {% bootstrap_button button_type='submit' content='Зарегистрироваться' button_class='btn-primary' %}
+                                    {% bootstrap_button button_type='submit' content='Зарегистрироваться' button_class='mt-2 btn-primary rounded-5 shadow w-100' %}
                                 </div>
                             </form>
                         </div>
@@ -22,12 +22,14 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-2 mb-5">
+        <div class="row mt-4 mb-5">
             <div class="d-flex justify-content-center">
-                <div class="col-lg-4 col-md-8 col-sm-11">
-                    <div class="card ">
-                        <div class="card-body d-flex justify-content-center">
-                            Есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+                <div class="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card rounded-4 shadow-sm border">
+                        <div class="card-body text-center">
+                            <span>
+                                Есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+                            </span>
                         </div>
                     </div>
                 </div>
