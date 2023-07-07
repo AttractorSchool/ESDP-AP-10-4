@@ -12,13 +12,13 @@ class HTTPClient(httpx.Client):
         method: str,
         url: URLTypes,
         *args,
-        **kwargs
+        **kwargs,
     ) -> Response:
         return super().request(
             method=method,
             url=os.path.join(settings.PAYMENT_URL, url),
             auth=(settings.PAYMENT_LOGIN, settings.PAYMENT_PASS),
-            **kwargs
+            **kwargs,
         )
 
 

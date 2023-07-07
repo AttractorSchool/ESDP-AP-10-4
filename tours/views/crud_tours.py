@@ -8,7 +8,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.edit import FormMixin
-
 from services.requests import http_client
 from tours.forms.tour_create_form import TourCreateForm
 from tours.forms.tour_image_form import TourImageForm
