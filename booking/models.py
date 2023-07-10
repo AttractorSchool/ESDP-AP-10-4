@@ -33,6 +33,13 @@ class Booking(models.Model):
     def hold_sum(self):
         return self.passengers.count() * self.tour.max_seat_hold_price()
 
+    def seat_charge_price(self):
+        return self.tour.price / self.passengers.count()
+
+    def confirm_payment_sum(self):
+        refund_sum = self.hold_sum() - (self.passengers.count() * self.seat_charge_price())
+        return self.hold_sum() - refund_sum
+
     def __str__(self):
         return f'{self.user} | {self.tour}'
 

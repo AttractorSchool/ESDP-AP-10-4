@@ -27,3 +27,4 @@ class BookingChoice(models.TextChoices):
     HOLD = 'HOLD', 'Удержано'
     CANCELED = 'CANCELED', 'Отменено'
     SENT_TO_VERIFICATION = 'SENT TO VERIFICATION', 'Отправлен на проверку'
+    PAYED = 'PAYED', 'Оплачено'
