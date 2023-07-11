@@ -22,7 +22,7 @@ class Booking(models.Model):
         max_length=256,
         null=False,
         choices=BookingChoice.choices,
-        default=BookingChoice.SENT_TO_VERIFICATION,
+        default=BookingChoice.CREATED,
     )
     transaction_id = models.SmallIntegerField(
         null=True,
