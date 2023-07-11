@@ -31,7 +31,11 @@ class Booking(models.Model):
     )
 
     def hold_sum(self):
-        return self.passengers.count() * self.tour.max_seat_hold_price()
+        if self.passengers.count() * self.tour.max_seat_hold_price() >= self.tour.price:
+            return self.tour.price
+        else:
+            return self.passengers.count() * self.tour.max_seat_hold_price()
+
 
     def seat_charge_price(self):
         return self.tour.price / self.passengers.count()

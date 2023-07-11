@@ -29,10 +29,10 @@ def repeat_hold_payment(booking):
         'https://api.cloudpayments.ru/payments/tokens/auth',
         auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
         json={
-            'amount': booking.hold_sum(),
-            'currency': 'KZT',
-            'account_id': booking.user,
-            'token': 'token s bazy',
+            'Amount': booking.hold_sum(),
+            'Currency': 'KZT',
+            'AccountId': booking.user,
+            'Token': 'token s bazy',
         },
     )
     if response.success:
@@ -48,10 +48,10 @@ def schedule_payment(booking_with_hold):
             'https://api.cloudpayments.ru/payments/tokens/confirm',
             auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
             json={
-                'amount': booking.confirm_payment_sum(),
-                'currency': 'KZT',
-                'account_id': booking.user,
-                'token': 'token s bazy',
+                'Amount': booking.confirm_payment_sum(),
+                'Currency': 'KZT',
+                'AccountId': booking.user,
+                'Token': booking.user.encrypted_card_token,
                 'TransactionId': booking.transaction_id,
             },
         )
