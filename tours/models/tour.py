@@ -147,7 +147,7 @@ class Tour(models.Model):
         return self.price / self.booking_tourist_count()
 
     def booking_tourist_count(self):
-        for passenger in self.users.all():
+        for passenger in self.users.filter(booking_status__in=[BookingChoice.RESERVED, BookingChoice.HOLD, BookingChoice.PAYED]):
             if passenger.passengers:
                 return passenger.passengers.count()
         return 0
