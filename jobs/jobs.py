@@ -11,15 +11,17 @@ def hold_payment_now(booking):
         'https://api.cloudpayments.ru/payments/tokens/auth',
         auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
         json={
-            'amount': booking.hold_sum(),
-            'currency': 'KZT',
-            'account_id': booking.user,
-            'token': 'token s bazy',
+            'Amount': booking.hold_sum(),
+            'Currency': 'KZT',
+            'AccountId': booking.user,
+            'Token':  booking.user.encrypted_card_token,
         },
     )
-    if response.success:
+    print(response)
+    response_data = response.json()
+    if response_data['Model'] == "true":
         booking.booking_status = BookingChoice.HOLD
-        booking.transaction_id = response['Model']['TransactionId']
+        booking.transaction_id = response_data['Model']['TransactionId']
     else:
         scheduler.add_job(repeat_hold_payment(booking), 'date', run_date=datetime.now() + timedelta(days=1))
 
@@ -32,12 +34,13 @@ def repeat_hold_payment(booking):
             'Amount': booking.hold_sum(),
             'Currency': 'KZT',
             'AccountId': booking.user,
-            'Token': 'token s bazy',
+            'Token': booking.transaction_id,
         },
     )
-    if response.success:
+    response_data = response.json()
+    if response_data['Model'] == "true":
         booking.booking_status = BookingChoice.HOLD
-        booking.transaction_id = response['Model']['TransactionId']
+        booking.transaction_id = response_data['Model']['TransactionId']
     else:
         booking.booking_status = BookingChoice.CANCELED
 
@@ -55,6 +58,11 @@ def schedule_payment(booking_with_hold):
                 'TransactionId': booking.transaction_id,
             },
         )
+        response_data = response.json()
+        if response_data['Model'] == "true":
+            booking.booking_status = BookingChoice.PAYED
+        else:
+            booking.booking_status = BookingChoice.CANCELED
 
 
 def is_enough_tourist(tour):
