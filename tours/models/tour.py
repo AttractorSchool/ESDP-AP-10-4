@@ -135,7 +135,7 @@ class Tour(models.Model):
 
     def get_free_place(self):
         active_passengers_count = self.max_number_of_tourists
-        for passenger in self.users.filter(booking_status=BookingChoice.RESERVED):
+        for passenger in self.users.filter(booking_status__in=[BookingChoice.RESERVED, BookingChoice.HOLD, BookingChoice.PAYED]):
             if passenger.passengers:
                 active_passengers_count = active_passengers_count - passenger.passengers.count()
         return active_passengers_count
