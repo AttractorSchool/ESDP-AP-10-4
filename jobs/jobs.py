@@ -34,7 +34,7 @@ def repeat_hold_payment(booking):
             'Amount': booking.hold_sum(),
             'Currency': 'KZT',
             'AccountId': booking.user,
-            'Token': booking.transaction_id,
+            'Token': booking.user.encrypted_card_token,
         },
     )
     response_data = response.json()
