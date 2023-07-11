@@ -143,6 +143,9 @@ class Tour(models.Model):
     def max_seat_hold_price(self):
         return self.price / self.min_number_of_tourists
 
+    def seat_charge_price(self):
+        return self.price / self.booking_tourist_count()
+
     def booking_tourist_count(self):
         for passenger in self.users.all():
             if passenger.passengers:
