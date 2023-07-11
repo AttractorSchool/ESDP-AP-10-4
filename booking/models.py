@@ -24,7 +24,7 @@ class Booking(models.Model):
         choices=BookingChoice.choices,
         default=BookingChoice.CREATED,
     )
-    transaction_id = models.SmallIntegerField(
+    transaction_id = models.IntegerField(
         null=True,
         blank=True,
         verbose_name='ID транзакции CP',

@@ -5,26 +5,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from choices import BookingChoice
 
 
-def hold_payment_now(booking):
-    scheduler = BackgroundScheduler()
-    response = httpx.post(
-        'https://api.cloudpayments.ru/payments/tokens/auth',
-        auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
-        json={
-            'Amount': booking.hold_sum(),
-            'Currency': 'KZT',
-            'AccountId': booking.user,
-            'Token':  booking.user.encrypted_card_token,
-        },
-    )
-    print(response)
-    response_data = response.json()
-    if response_data['Model'] == "true":
-        booking.booking_status = BookingChoice.HOLD
-        booking.transaction_id = response_data['Model']['TransactionId']
-    else:
-        scheduler.add_job(repeat_hold_payment(booking), 'date', run_date=datetime.now() + timedelta(days=1))
-
+hold_scheduler = BackgroundScheduler()
 
 def repeat_hold_payment(booking):
     response = httpx.post(
@@ -33,16 +14,47 @@ def repeat_hold_payment(booking):
         json={
             'Amount': booking.hold_sum(),
             'Currency': 'KZT',
-            'AccountId': booking.user,
+            'AccountId': booking.user.id,
             'Token': booking.user.encrypted_card_token,
         },
     )
     response_data = response.json()
-    if response_data['Model'] == "true":
+    if response_data['Success']:
         booking.booking_status = BookingChoice.HOLD
         booking.transaction_id = response_data['Model']['TransactionId']
     else:
         booking.booking_status = BookingChoice.CANCELED
+
+
+def hold_payment_now(booking):
+    print("начинаю холдирование")
+    response = httpx.post(
+        'https://api.cloudpayments.ru/payments/tokens/auth',
+        auth=('pk_aad02fa59dec0bacabf00955821fd', '9b431e1c5d36c6c36d01b7635751af5f'),
+        json={
+            'Amount': booking.hold_sum(),
+            'Currency': 'KZT',
+            'AccountId': booking.user.id,
+            'Token':  booking.user.encrypted_card_token,
+        },
+    )
+    print(response.json())
+    response_data = response.json()
+    if response_data['Success']:
+        print("success true")
+        booking.booking_status = BookingChoice.HOLD
+        booking.transaction_id = response_data['Model']['TransactionId']
+        booking.save()
+    else:
+        print("success false")
+        hold_scheduler.add_job(
+            repeat_hold_payment,
+            'date',
+            run_date=datetime.now() + timedelta(days=1),
+            args=(booking,),
+            id=f'{booking.id}') #при отмене брони юзером нужно у hold_scheduler убирать джоп на повторное списание
+        # scheduler.start()
+        print(hold_scheduler.get_jobs())
 
 
 def schedule_payment(booking_with_hold):
@@ -53,13 +65,13 @@ def schedule_payment(booking_with_hold):
             json={
                 'Amount': booking.confirm_payment_sum(),
                 'Currency': 'KZT',
-                'AccountId': booking.user,
+                'AccountId': booking.user.id,
                 'Token': booking.user.encrypted_card_token,
                 'TransactionId': booking.transaction_id,
             },
         )
         response_data = response.json()
-        if response_data['Model'] == "true":
+        if response_data['Success']:
             booking.booking_status = BookingChoice.PAYED
         else:
             booking.booking_status = BookingChoice.CANCELED

@@ -60,6 +60,7 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
             return False
 
 
+
 class AddPassengersView(View):
     def post(self, request, pk, passengers_count):
         # booking = get_object_or_404(Booking, pk=pk)

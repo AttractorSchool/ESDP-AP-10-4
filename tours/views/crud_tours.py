@@ -126,6 +126,7 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
 
         response_data = response.json()
         success = response_data['Success']
+
         token = response_data['Model']['Token']
         account_id = response_data['Model']['AccountId']
 
