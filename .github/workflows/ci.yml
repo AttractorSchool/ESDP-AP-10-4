@@ -13,23 +13,51 @@ jobs:
           python-version: 3.11
       - run: pip install -r requirements/dev.txt
       - run: flake8 .
+#
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: 3.11
+
 
   build:
-    # 1
 #    if: github.event_name == 'pull_request'
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [ 3.10.11 ]
+        python-version: [ "3.11" ]
 
     steps:
       - uses: actions/checkout@v3
-#      - name: Set up Python ${{ matrix.python-version }}
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ matrix.python-version }}
-      - name: build compose
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+        env:
+          DEBUG: "1"
+          SECRET_KEY: "3+($${l})*g1v3*7c91^vs+!b^af89cf8)73n6-c2h-f-upgmtf@zh("
+          DATABASE_URL: "postgres://postgres:postgres@postgres/postgres"
+          PAYMENT_LOGIN: "pk_aad02fa59dec0bacabf00955821fd"
+          PAYMENT_PASS: "9b431e1c5d36c6c36d01b7635751af5f"
+          PAYMENT_URL: "https://api.cloudpayments.ru/payments"
+
+      - name: Write SSH keys
         run: |
-          docker-compose up -d --remove-orphans
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          host='46.101.206.144'
+          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+
+      - name: connect and pull
+            ssh root@46.101.206.144
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "git pull && docker-compose up -d --force-recreate --remove-orphans && docker ps && exit"
+
+      - name: cleanup
+        run: rm -rf ~/.ssh
