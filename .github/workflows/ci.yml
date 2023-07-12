@@ -15,6 +15,7 @@ jobs:
       - run: flake8 .
 
   build:
+    # 1
 #    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
