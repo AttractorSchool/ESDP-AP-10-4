@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import httpx
 from booking.models import Booking
 from choices import StatusChoice, BookingChoice
@@ -15,6 +17,7 @@ from tours.models.tour import Tour
 from tours.models.image import TourImage
 from tours.forms.tour_rating_create_form import TourRatingCreateForm
 from jobs.jobs import hold_payment_now
+from jobs.jobs import hold_scheduler
 
 from accounts.models import User
 
@@ -138,6 +141,7 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
             user.save()
 
             booking.booking_status = BookingChoice.RESERVED
+            booking.reserved_at = datetime.now()
             booking.save()
             httpx.post(
                 'https://api.cloudpayments.ru/payments/void',
@@ -145,7 +149,17 @@ class TourDetailView(UserPassesTestMixin, FormMixin, DetailView):
                 json={'TransactionId': MD},
             )
 
-            hold_payment_now(booking)
+            if booking.reserved_at >= booking.tour.get_hold_date():
+                hold_payment_now(booking)
+            else:
+                hold_scheduler.add_job(
+                    hold_payment_now,
+                    'date', run_date=self.get_object().get_hold_date(),
+                    args=(booking,),
+                    id=f'{booking.id}'
+                )
+                hold_scheduler.print_jobs()
+                print("hi")
 
         return redirect('tour_detail', pk=kwargs.get('pk'))
 

@@ -152,5 +152,8 @@ class Tour(models.Model):
                 return passenger.passengers.count()
         return 0
 
+    def get_hold_date(self):
+        return self.start_date - timedelta(days=7)
+
     def __str__(self):
         return f'Tour {self.title} by {self.author}'

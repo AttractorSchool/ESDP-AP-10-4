@@ -10,6 +10,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.detail import SingleObjectMixin
+
+from jobs.jobs import hold_scheduler
 from tours.models import Tour
 
 ALLOW_TO_BOOK_OR_CANCEL = [
@@ -24,7 +26,12 @@ class BookToursView(UserPassesTestMixin, SingleObjectMixin, View):
         tour = get_object_or_404(self.model, pk=pk)
 
         if request.user in tour.tourists.all():
-            Booking.objects.filter(user=request.user, tour=tour).delete()
+            booking = Booking.objects.filter(user=request.user, tour=tour).first()
+            print(booking)
+            hold_scheduler.print_jobs()
+            hold_scheduler.remove_job(f'{booking.id}')
+            hold_scheduler.print_jobs()
+            booking.delete()
             return redirect('tour_detail', pk=pk)
 
         passengers_count = 1
@@ -97,7 +104,6 @@ class AddPassengersView(View):
                 },
             ],
         )
-
         return render(request, 'passengers_form/passenger_form.html', {'formset': formset})
 
 

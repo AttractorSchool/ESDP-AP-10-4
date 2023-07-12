@@ -30,6 +30,10 @@ class Booking(models.Model):
         verbose_name='ID транзакции CP',
     )
 
+    reserved_at = models.DateTimeField(
+        null=True
+    )
+
     def hold_sum(self):
         if self.passengers.count() * self.tour.max_seat_hold_price() >= self.tour.price:
             return self.tour.price

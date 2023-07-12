@@ -19,6 +19,7 @@ class StatusChoice(models.TextChoices):
     REFUSED = 'REFUSED', 'Отказ'
     FINISHED = 'FINISHED', 'Завершён'
     STARTED = 'STARTED', 'Начался'
+    CANCELED = 'CANCELED', 'Отменено'
 
 
 class BookingChoice(models.TextChoices):
