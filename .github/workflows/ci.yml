@@ -90,5 +90,11 @@ jobs:
         env:
           SERVER_IP: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
         run: |
-          docker-compose -f docker-compose.prod.yml pull
-          docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+          scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml root@${{ secrets.SSH_HOST }}:/app
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.SSH_HOST }} << 'ENDSSH'
+            cd /app
+            source .env
+            docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
+            docker pull $WEB_IMAGE
+            sudo docker-compose -f docker-compose.prod.yml up -d
+          ENDSSH
