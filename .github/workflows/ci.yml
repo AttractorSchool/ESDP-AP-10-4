@@ -24,16 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v1
       - name: Add environment variables to .env
         run: |
-          echo "DEBUG=1" >> .env
-#          echo "ACTIONS_TOKEN=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" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
-          echo "PAYMENT_PASS=${{ secrets.PAYMENT_PASS }}" >> .env
-          echo "PAYMENT_URL=${{ secrets.PAYMENT_URL }}" >> .env
+               echo "DEBUG=1" >> .env
+          #          echo "ACTIONS_TOKEN=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" >> .env
+               echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+               echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+               echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
+               echo "PAYMENT_PASS=${{ secrets.PAYMENT_PASS }}" >> .env
+               echo "PAYMENT_URL=${{ secrets.PAYMENT_URL }}" >> .env
 
       - name: Set environment variables
         run: |
