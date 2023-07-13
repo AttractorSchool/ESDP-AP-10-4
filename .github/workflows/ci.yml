@@ -9,24 +9,24 @@ env:
   WEB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/web
 
 jobs:
-#  check-code-style:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: 3.11
-#      - run: pip install -r requirements/dev.txt
-#      - run: flake8 .
+  check-code-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - run: pip install -r requirements/dev.txt
+      - run: flake8 .
 
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@dev
-    - name: Add environment variables to .env
-      run: |
+      - name: Checkout
+        uses: actions/checkout@dev
+      - name: Add environment variables to .env
+        run: |
              echo "DEBUG=1" >> .env
         #          echo "ACTIONS_TOKEN=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" >> .env
              echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
@@ -34,24 +34,24 @@ jobs:
              echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
              echo "PAYMENT_PASS=${{ secrets.PAYMENT_PASS }}" >> .env
              echo "PAYMENT_URL=${{ secrets.PAYMENT_URL }}" >> .env
-    - name: Set environment variables
-      run: |
-        echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
-    - name: Log in to GitHub Packages
-      run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
-      env:
-        PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-    - name: Pull images
-      run: |
-        docker pull ${{ env.WEB_IMAGE }} || true
-    - name: Build images
-      run: |
-        docker-compose -f docker-compose.yml build
-    - name: Push images
-      run: |
-        docker push ${{ env.WEB_IMAGE }}
+      - name: Set environment variables
+        run: |
+          echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
+      - name: Log in to GitHub Packages
+        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Pull images
+        run: |
+          docker pull ${{ env.WEB_IMAGE }} || true
+      - name: Build images
+        run: |
+          docker-compose -f docker-compose.yml build
+      - name: Push images
+        run: |
+          docker push ${{ env.WEB_IMAGE }}
 
-#
+  #
 #  build:
 #    runs-on: ubuntu-latest
 #    steps:
