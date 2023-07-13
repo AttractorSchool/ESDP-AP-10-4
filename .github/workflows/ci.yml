@@ -52,3 +52,42 @@ jobs:
       - name: Push images
         run: |
           docker push ${{ env.WEB_IMAGE }}
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v3
+      - name: Add environment variables to .env
+        run: |
+          echo "DEBUG=1" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
+          echo "PAYMENT_PASS=${{ secrets.PAYMENT_PASS }}" >> .env
+          echo "PAYMENT_URL=${{ secrets.PAYMENT_URL }}" >> .env
+          echo "WEB_IMAGE=${{ env.WEB_IMAGE }}" >> .env
+          echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
+          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
+      - name: Add the private SSH key to the ssh-agent
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+      - name: Build and deploy images
+        env:
+          SERVER_IP: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: |
+          scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml $SERVER_IP:/app
+          ssh -o StrictHostKeyChecking=no $SERVER_IP << 'ENDSSH'
+            cd /app
+            source .env
+            docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
+            docker pull $WEB_IMAGE
+            sudo docker-compose up -d
+          ENDSSH
