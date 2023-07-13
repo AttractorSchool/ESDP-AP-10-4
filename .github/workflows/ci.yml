@@ -1,7 +1,12 @@
+name: Continuous Integration and Delivery
+
 on:
   pull_request:
     branches:
       - dev
+
+env:
+  WEB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/web
 
 jobs:
   check-code-style:
@@ -15,29 +20,83 @@ jobs:
       - run: flake8 .
 
   build:
+    name: Build Docker Images
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:alpine
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - '5432:5432'
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Add environment variables to .env
+        run: |
+          echo "DEBUG=1" >> .env
+#          echo "ACTIONS_TOKEN=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" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
+          echo "PAYMENT_PASS=${{ secrets.PAYMENT_PASS }}" >> .env
+          echo "PAYMENT_URL=${{ secrets.PAYMENT_URL }}" >> .env
 
-      - run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/dev.txt
-
+      - name: Set environment variables
+        run: |
+          echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
+      - name: Log in to GitHub Packages
+        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
         env:
-          DEBUG: "1"
-          SECRET_KEY: "3+($${l})*g1v3*7c91^vs+!b^af89cf8)73n6-c2h-f-upgmtf@zh("
-          DATABASE_URL: "postgres://postgres:postgres@postgres/postgres"
-          PAYMENT_LOGIN: "pk_aad02fa59dec0bacabf00955821fd"
-          PAYMENT_PASS: "9b431e1c5d36c6c36d01b7635751af5f"
-          PAYMENT_URL: "https://api.cloudpayments.ru/payments"
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Pull images
+        run: |
+          docker pull ${{ env.WEB_IMAGE }} || true
+      - name: Build images
+        run: |
+          docker-compose -f docker-compose.yml build
+      - name: Push images
+        run: |
+          docker push ${{ env.WEB_IMAGE }}
+
+#
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: 3.11
+#
+#
+#  build:
+##    if: github.event_name == 'pull_request'
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      max-parallel: 4
+#      matrix:
+#        python-version: [ "3.11" ]
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up Python ${{ matrix.python-version }}
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: ${{ matrix.python-version }}
+#
+#        env:
+#          DEBUG: "1"
+#          ACTIONS_TOKEN: "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"
+#          SECRET_KEY: "3+($${l})*g1v3*7c91^vs+!b^af89cf8)73n6-c2h-f-upgmtf@zh("
+#          DATABASE_URL: "postgres://postgres:postgres@postgres/postgres"
+#          PAYMENT_LOGIN: "pk_aad02fa59dec0bacabf00955821fd"
+#          PAYMENT_PASS: "9b431e1c5d36c6c36d01b7635751af5f"
+#          PAYMENT_URL: "https://api.cloudpayments.ru/payments"
+#
+#      - name: Write SSH keys
+#        run: |
+#          install -m 600 -D /dev/null ~/.ssh/id_rsa
+#          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#          host='46.101.206.144'
+#          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+#          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+#
+#      - name: connect and pull
+#        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "git pull && docker-compose up -d --force-recreate --remove-orphans && docker ps && exit"
+#
+#      - name: cleanup
+#        run: rm -rf ~/.ssh
