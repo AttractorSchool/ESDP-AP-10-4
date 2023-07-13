@@ -26,6 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('SECRET_KEY')
 
+# Payments
+PAYMENT_LOGIN = env.str('PAYMENT_LOGIN')
+PAYMENT_PASS = env.str('PAYMENT_PASS')
+PAYMENT_URL = env.str('PAYMENT_URL')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 

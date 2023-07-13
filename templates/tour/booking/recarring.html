@@ -5,122 +5,177 @@
 
 {% block content %}
 
-    <div class="card col col-6 bg-light">
-        <div class="card-body">
-
-            <form id="recarringForm" autocomplete="on">
-                {% csrf_token %}
-                <label for="cardNumber" class=" text-muted mb-2 col-label text-grey">Номер карты:</label>
-                <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-credit-card" viewBox="0 0 16 16">
-                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-                                <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-                            </svg>
-                        </span>
-                    <input type="text" autocomplete="cc-number" class="form-control" id="cardNumber"
-                           data-cp="cardNumber"
-                           placeholder="0000 0000 0000 0000">
-                </div>
-
-                <div class="mb-3">
-                    <label for="expDateMonth" class="form-label">Expiration Month</label>
-                    <input id="expDateMonth" type="text" data-cp="expDateMonth">
-                </div>
-
-                <div class="mb-3">
-                    <label for="expDateYear" class="form-label">Expiration Year</label>
-                    <input id="expDateYear" type="text" data-cp="expDateYear">
-                </div>
-
-                <div class="mb-3">
-                    <label for="CVV" class="form-label">CVV</label>
-                    <input id="CVV" type="text" data-cp="cvv">
-                </div>
-
-
-                <div class="mb-3">
-                    <label for="name" class="form-label">Holder Name</label>
-                    <input id="name" type="text" data-cp="name">
-                </div>
-                {% bootstrap_button button_type="submit" id="id_submit" content="Забронировать" %}
-            </form>
-
-            <form id="stage_form" name="downloadForm" action="" method="POST">
-                <input id="pareq" type="hidden" name="PaReq" value="">
-                <input id="md" type="hidden" name="MD" value="">
-                <input id="termurl" type="hidden" name="TermUrl" value="">
-            </form>
-
-        </div>
-    </div>
-
-
-    <script src="https://checkout.cloudpayments.ru/checkout.js"></script>
-
-
     <script>
-        function redirectNext(successUrl) {
-            window.location.replace(successUrl)
-        }
+        console.log(123123123)
+        this.pay = function () {
+            var widget = new cp.CloudPayments();
+            widget.pay('auth', // или 'charge'
+                { //options
+                    publicId: 'test_api_00000000000000000000002', //id из личного кабинета
+                    description: 'Оплата товаров в example.com', //назначение
+                    amount: 100, //сумма
+                    currency: 'RUB', //валюта
+                    accountId: 'user@example.com', //идентификатор плательщика (необязательно)
+                    invoiceId: '1234567', //номер заказа  (необязательно)
+                    email: 'user@example.com', //email плательщика (необязательно)
+                    skin: "mini", //дизайн виджета (необязательно)
+                    autoClose: 3, //время в секундах до авто-закрытия виджета (необязательный)
+                    data: {
+                        myProp: 'myProp value'
+                    },
+                    configuration: {
+                        common: {
+                            successRedirectUrl: "https://{ваш сайт}/success", // адреса для перенаправления
+                            failRedirectUrl: "https://{ваш сайт}/fail"        // при оплате по Tinkoff Pay
+                        }
+                    },
+                    payer: {
+                        firstName: 'Тест',
+                        lastName: 'Тестов',
+                        middleName: 'Тестович',
+                        birth: '1955-02-24',
+                        address: 'тестовый проезд дом тест',
+                        street: 'Lenina',
+                        city: 'MO',
+                        country: 'RU',
+                        phone: '123',
+                        postcode: '345'
+                    }
+                },
+                {
+                    onSuccess: function (options) { // success
+                        //действие при успешной оплате
+                    },
+                    onFail: function (reason, options) { // fail
+                        //действие при неуспешной оплате
+                    },
+                    onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+                        //например вызов вашей аналитики
+                    }
+                }
+            )
+        };
 
-
-        let user_ip = "3.72.70.155"
-        let submitButton = $('#id_submit')
-        let checkout = new cp.Checkout({
-            publicId: "pk_aad02fa59dec0bacabf00955821fd",
-            container: document.getElementById("recarringForm")
-        });
-
-
-        $(submitButton).click(function (event) {
-            event.preventDefault()
-            const user_id = {{ request.user.id }}
-            checkout.createPaymentCryptogram()
-                .then((cryptogram) => {
-                    console.log(cryptogram);
-                    $.ajax({
-                        url: "https://api.cloudpayments.ru/payments/cards/auth",
-                        method: "POST",
-                        data: {
-                            Amount: 100,
-                            Currency: "KZT",
-                            IpAddress: user_ip,
-                            CardCryptogramPacket: cryptogram,
-                            AccountId: user_id,
-                            publicId: "pk_aad02fa59dec0bacabf00955821fd",
-                            password: "9b431e1c5d36c6c36d01b7635751af5f",
-                        },
-                        success: function (data) {
-                            console.log(data)
-                            console.log(data.Model.AcsUrl)
-                            console.log(data.Model.PaReq)
-                            console.log(data.Model.TransactionId)
-                            $('#pareq').val(data.Model.PaReq)
-                            $('#md').val(data.Model.TransactionId)
-                            let urlParams = new URLSearchParams(window.location.search)
-                            let tourId = urlParams.get("tour_id")
-                            console.log(tourId)
-                            $('#termurl').val(`http://localhost:8000/tours/${tourId}/`)
-                            $('#stage_form').attr("action", data.Model.AcsUrl)
-                            $('#stage_form').submit()
-
-
-                        },
-                        error: function (response, status) {
-                            console.log("ERROR")
-                            console.log(status)
-                            console.log(response)
-                        },
-                    });
-                }).catch((errors) => {
-                console.log("here errors")
-                console.log(errors)
-            });
-        })
-
+        $('#checkout').click(pay);
     </script>
+
+
+    {#    <div class="card col col-6 bg-light">#}
+    {#        <div class="card-body">#}
+    {##}
+    {#            <form id="recarringForm" autocomplete="on">#}
+    {#                {% csrf_token %}#}
+    {#                <label for="cardNumber" class=" text-muted mb-2 col-label text-grey">Номер карты:</label>#}
+    {#                <div class="input-group mb-3">#}
+    {#                        <span class="input-group-text" id="basic-addon1">#}
+    {#                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"#}
+    {#                                 class="bi bi-credit-card" viewBox="0 0 16 16">#}
+    {#                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>#}
+    {#                                <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>#}
+    {#                            </svg>#}
+    {#                        </span>#}
+    {#                    <input type="text" autocomplete="cc-number" class="form-control" id="cardNumber"#}
+    {#                           data-cp="cardNumber"#}
+    {#                           placeholder="0000 0000 0000 0000">#}
+    {#                </div>#}
+    {##}
+    {#                <div class="mb-3">#}
+    {#                    <label for="expDateMonth" class="form-label">Expiration Month</label>#}
+    {#                    <input id="expDateMonth" type="text" data-cp="expDateMonth">#}
+    {#                </div>#}
+    {##}
+    {#                <div class="mb-3">#}
+    {#                    <label for="expDateYear" class="form-label">Expiration Year</label>#}
+    {#                    <input id="expDateYear" type="text" data-cp="expDateYear">#}
+    {#                </div>#}
+    {##}
+    {#                <div class="mb-3">#}
+    {#                    <label for="CVV" class="form-label">CVV</label>#}
+    {#                    <input id="CVV" type="text" data-cp="cvv">#}
+    {#                </div>#}
+    {##}
+    {##}
+    {#                <div class="mb-3">#}
+    {#                    <label for="name" class="form-label">Holder Name</label>#}
+    {#                    <input id="name" type="text" data-cp="name">#}
+    {#                </div>#}
+    {#                {% bootstrap_button button_type="submit" id="id_submit" content="Забронировать" %}#}
+    {#            </form>#}
+    {##}
+    {#            <form id="stage_form" name="downloadForm" action="" method="POST">#}
+    {#                <input id="pareq" type="hidden" name="PaReq" value="">#}
+    {#                <input id="md" type="hidden" name="MD" value="">#}
+    {#                <input id="termurl" type="hidden" name="TermUrl" value="">#}
+    {#            </form>#}
+    {##}
+    {#        </div>#}
+    {#    </div>#}
+    {##}
+    {##}
+    {#    <script src="https://checkout.cloudpayments.ru/checkout.js"></script>#}
+    {##}
+    {##}
+    {#    <script>#}
+    {#        function redirectNext(successUrl) {#}
+    {#            window.location.replace(successUrl)#}
+    {#        }#}
+    {##}
+    {##}
+    {#        let user_ip = "3.72.70.155"#}
+    {#        let submitButton = $('#id_submit')#}
+    {#        let checkout = new cp.Checkout({#}
+    {#            publicId: "pk_aad02fa59dec0bacabf00955821fd",#}
+    {#            container: document.getElementById("recarringForm")#}
+    {#        });#}
+    {##}
+    {##}
+    {#        $(submitButton).click(function (event) {#}
+    {#            event.preventDefault()#}
+    {#            const user_id = {{ request.user.id }}#}
+    {#            checkout.createPaymentCryptogram()#}
+    {#                .then((cryptogram) => {#}
+    {#                    console.log(cryptogram);#}
+    {#                    $.ajax({#}
+    {#                        url: "https://api.cloudpayments.ru/payments/cards/auth",#}
+    {#                        method: "POST",#}
+    {#                        data: {#}
+    {#                            Amount: 100,#}
+    {#                            Currency: "KZT",#}
+    {#                            IpAddress: user_ip,#}
+    {#                            CardCryptogramPacket: cryptogram,#}
+    {#                            AccountId: user_id,#}
+    {#                            publicId: "pk_aad02fa59dec0bacabf00955821fd",#}
+    {#                            password: "9b431e1c5d36c6c36d01b7635751af5f",#}
+    {#                        },#}
+    {#                        success: function (data) {#}
+    {#                            console.log(data)#}
+    {#                            console.log(data.Model.AcsUrl)#}
+    {#                            console.log(data.Model.PaReq)#}
+    {#                            console.log(data.Model.TransactionId)#}
+    {#                            $('#pareq').val(data.Model.PaReq)#}
+    {#                            $('#md').val(data.Model.TransactionId)#}
+    {#                            let urlParams = new URLSearchParams(window.location.search)#}
+    {#                            let tourId = urlParams.get("tour_id")#}
+    {#                            console.log(tourId)#}
+    {#                            $('#termurl').val(`http://localhost:8000/tours/${tourId}/`)#}
+    {#                            $('#stage_form').attr("action", data.Model.AcsUrl)#}
+    {#                            $('#stage_form').submit()#}
+    {##}
+    {##}
+    {#                        },#}
+    {#                        error: function (response, status) {#}
+    {#                            console.log("ERROR")#}
+    {#                            console.log(status)#}
+    {#                            console.log(response)#}
+    {#                        },#}
+    {#                    });#}
+    {#                }).catch((errors) => {#}
+    {#                console.log("here errors")#}
+    {#                console.log(errors)#}
+    {#            });#}
+    {#        })#}
+    {##}
+    {#    </script>#}
 {% endblock %}
 
 
