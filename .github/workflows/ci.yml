@@ -25,7 +25,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@dev
-
     - name: Add environment variables to .env
       run: |
              echo "DEBUG=1" >> .env
@@ -35,7 +34,6 @@ jobs:
              echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
              echo "PAYMENT_PASS=${{ secrets.PAYMENT_PASS }}" >> .env
              echo "PAYMENT_URL=${{ secrets.PAYMENT_URL }}" >> .env
-
     - name: Set environment variables
       run: |
         echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
