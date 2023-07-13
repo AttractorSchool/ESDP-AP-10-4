@@ -1,4 +1,4 @@
-name: Continuous Integration and Delivery
+#name: Continuous Integration and Delivery
 
 on:
   pull_request:
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Add environment variables to .env
         run: |
                echo "DEBUG=1" >> .env
