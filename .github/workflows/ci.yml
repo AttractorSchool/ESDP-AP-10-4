@@ -41,10 +41,8 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ PERSONAL_ACCESS_TOKEN }}
+          password: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 #        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Pull images
         run: |
           docker pull ${{ env.WEB_IMAGE }} || true
