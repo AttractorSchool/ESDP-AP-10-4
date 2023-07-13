@@ -28,7 +28,6 @@ jobs:
       - name: Add environment variables to .env
         run: |
              echo "DEBUG=1" >> .env
-        #          echo "ACTIONS_TOKEN=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" >> .env
              echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
              echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
              echo "PAYMENT_LOGIN=${{ secrets.PAYMENT_LOGIN }}" >> .env
