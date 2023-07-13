@@ -48,7 +48,7 @@ jobs:
           docker pull ${{ env.WEB_IMAGE }} || true
       - name: Build images
         run: |
-          docker-compose build
+          docker build -t ${{ env.WEB_IMAGE }} -f ./docker/Dockerfile.dev .
       - name: Push images
         run: |
           docker push ${{ env.WEB_IMAGE }}
@@ -83,11 +83,5 @@ jobs:
         env:
           SERVER_IP: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
         run: |
-          scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml $SERVER_IP:/app
-          ssh -o StrictHostKeyChecking=no $SERVER_IP << 'ENDSSH'
-            cd /app
-            source .env
-            docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
-            docker pull $WEB_IMAGE
-            sudo docker-compose up -d
-          ENDSSH
+          docker-compose -f docker-compose.prod.yml pull
+          docker-compose -f docker-compose.prod.yml up -d --remove-orphans
