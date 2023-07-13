@@ -8,7 +8,7 @@ services:
       SECRET_KEY: 3+($${l})*g1v3*7c91^vs+!b^af89cf8)73n6-c2h-f-upgmtf@zh(
       DATABASE_URL: postgres://postgres:postgres@postgres/postgres
     tty: true
-    command: bash -c "echo 123123123 && ls -al && python3 manage.py runserver 0.0.0.0:8000"
+    command: sh -c "sh docker/start.sh"
     volumes:
       - .:/app
     ports:
