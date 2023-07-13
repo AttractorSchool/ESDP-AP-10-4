@@ -79,6 +79,12 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+      - name: Log in to GitHub Packages
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Build and deploy images
         env:
           SERVER_IP: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
